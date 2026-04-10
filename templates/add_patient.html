@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Patient 👤</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI';
+            background: linear-gradient(to right, #43cea2, #185a9d);
+        }
+
+        .container {
+            width: 350px;
+            margin: auto;
+            margin-top: 80px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 95%;
+            padding: 10px;
+            background: #43cea2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Add Patient 👤</h1>
+
+<form method="POST">
+    <input type="text" name="name" placeholder="Enter Name" required>
+    <input type="number" name="age" placeholder="Enter Age" required>
+    <input type="text" name="disease" placeholder="Enter Disease" required>
+
+    <button type="submit">Save 💾</button>
+</form>
+
+<a href="/">⬅ Back</a>
+
+</div>
+
+</body>
+</html>
