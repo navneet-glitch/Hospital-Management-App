@@ -11,59 +11,56 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; min-height: 100vh; }
 
-/* SIDEBAR */
-.sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; }
-.logo { display: flex; align-items: center; gap: 10px; padding-bottom: 20px; }
+.sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+
+.logo { display: flex; align-items: center; gap: 10px; padding: 4px 8px 22px; }
 .logo-text { font-size: 15px; font-weight: 500; color: #27500A; }
 
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; font-size: 13px; color: #5F5E5A; text-decoration: none; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; font-size: 13px; color: #5F5E5A; text-decoration: none; }
 .nav-item:hover { background: #f0faf5; color: #27500A; }
 .nav-item.active { background: #EAF3DE; color: #27500A; }
 
-.sidebar-footer { margin-top: auto; border-top: 1px solid #d4e8d4; padding-top: 15px; }
+.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 0.5px solid #d4e8d4; }
 
-/* USER */
-.user-card { display: flex; align-items: center; gap: 10px; }
-.user-avt {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: #EAF3DE; color: #27500A;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: bold;
-}
-.user-name { font-size: 12px; font-weight: 500; }
+.user-card { display: flex; align-items: center; gap: 9px; padding: 8px 10px; }
+.user-avt { width: 32px; height: 32px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; }
+
+.user-name { font-size: 12px; font-weight: 500; color: #173404; }
 .user-role { font-size: 11px; color: #639922; }
 
-/* LOGOUT */
 .logout-btn {
   margin-top: 10px;
-  display: block;
   padding: 8px;
   background: #FCEBEB;
   color: #791F1F;
   text-decoration: none;
   border-radius: 8px;
+  display: block;
   text-align: center;
 }
 
-/* MAIN */
-.main { margin-left: 220px; width: 100%; }
+.main { margin-left: 220px; flex: 1; }
 
 .topbar {
+  background: #fff;
+  border-bottom: 0.5px solid #d4e8d4;
+  padding: 13px 26px;
   display: flex;
   justify-content: space-between;
-  padding: 15px 25px;
-  background: white;
-  border-bottom: 1px solid #d4e8d4;
+  align-items: center;
 }
 
 .top-avatar {
-  width: 32px; height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: #EAF3DE;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.content { padding: 20px; }
+.content { padding: 22px 26px; }
 </style>
 </head>
 
@@ -79,9 +76,9 @@ body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; m
   <a href="/" class="nav-item active">Dashboard</a>
   <a href="/patients" class="nav-item">Patients</a>
 
-  <!-- FOOTER -->
   <div class="sidebar-footer">
 
+    <!-- USER -->
     <div class="user-card">
       <div class="user-avt">
         {{ session['user'][0] | upper if 'user' in session else 'U' }}
@@ -94,6 +91,7 @@ body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; m
       </div>
     </div>
 
+    <!-- LOGOUT -->
     <a href="/logout" class="logout-btn">Logout</a>
 
   </div>
@@ -105,22 +103,23 @@ body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; m
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <div>Dashboard</div>
 
-    <div style="display:flex; gap:10px; align-items:center;">
+    <div>Patient Dashboard</div>
+
+    <div style="display:flex; align-items:center; gap:10px;">
       <div>{{ session['user'] if 'user' in session else 'Guest' }}</div>
 
       <div class="top-avatar">
         {{ session['user'][0] | upper if 'user' in session else 'U' }}
       </div>
     </div>
+
   </div>
 
   <!-- CONTENT -->
   <div class="content">
 
     <h3>Total Patients: {{ patients|length }}</h3>
-
     <br>
 
     <table border="1" cellpadding="10">

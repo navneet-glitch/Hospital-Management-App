@@ -42,13 +42,13 @@ def index():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
+        name = request.form['name']
         password = request.form['password']
         email = request.form['email']
         cursor = db.cursor()
         cursor.execute(
-            "INSERT INTO users (email, username, password) VALUES (%s, %s, %s)",
-            (email, username, password)
+            "INSERT INTO users (email, name, password) VALUES (%s, %s, %s)",
+            (email, name, password)
         )
         db.commit()
 
@@ -63,7 +63,6 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
         password = request.form['password']
         email = request.form['email']
         cursor = db.cursor()
@@ -79,7 +78,7 @@ def login():
         else:
             return "Invalid email or password ❌"
 
-    return render_template('login.html')
+    return render_template('signin.html')
 
 
 # ===========================
