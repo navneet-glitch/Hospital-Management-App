@@ -1,101 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard 🏥</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard 🏥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; min-height: 100vh; }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    .sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; padding: 4px 8px 22px; }
+    .logo-icon { width: 34px; height: 34px; background: #EAF3DE; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 15px; font-weight: 500; color: #27500A; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; font-size: 13px; color: #5F5E5A; cursor: pointer; text-decoration: none; }
+    .nav-item:hover { background: #f0faf5; color: #27500A; }
+    .nav-item.active { background: #EAF3DE; color: #27500A; font-weight: 500; }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 0.5px solid #d4e8d4; }
+    .user-card { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 10px; }
+    .user-avt { width: 32px; height: 32px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+    .user-name { font-size: 12px; font-weight: 500; color: #173404; }
+    .user-role { font-size: 11px; color: #639922; }
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; min-height: 100vh; }
+    .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
 
-.sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+    .topbar { background: #fff; border-bottom: 0.5px solid #d4e8d4; padding: 13px 26px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-size: 15px; font-weight: 500; color: #173404; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .search-wrap { display: flex; align-items: center; gap: 8px; background: #f7fbf7; border: 0.5px solid #c8e8c8; border-radius: 9px; padding: 7px 13px; }
+    .search-wrap input { border: none; outline: none; background: transparent; font-family: 'Poppins', sans-serif; font-size: 13px; color: #27500A; width: 180px; }
+    .search-wrap input::placeholder { color: #8ab48a; }
+    .notif-btn { width: 34px; height: 34px; border-radius: 50%; background: #f7fbf7; border: 0.5px solid #c8e8c8; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+    .notif-dot { width: 7px; height: 7px; background: #E24B4A; border-radius: 50%; position: absolute; top: 6px; right: 6px; }
+    .top-avatar { width: 34px; height: 34px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; }
 
-.logo { display: flex; align-items: center; gap: 10px; padding: 4px 8px 22px; }
-.logo-text { font-size: 15px; font-weight: 500; color: #27500A; }
+    .content { padding: 22px 26px; }
 
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; font-size: 13px; color: #5F5E5A; text-decoration: none; }
-.nav-item:hover { background: #f0faf5; color: #27500A; }
-.nav-item.active { background: #EAF3DE; color: #27500A; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-bottom: 22px; }
+    .stat-card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; padding: 15px 16px; }
+    .stat-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .stat-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .stat-badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .stat-value { font-size: 24px; font-weight: 500; color: #173404; margin: 10px 0 2px; }
+    .stat-label { font-size: 12px; color: #639922; }
 
-.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 0.5px solid #d4e8d4; }
+    .mid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+    .card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; padding: 16px; }
+    .card-title { font-size: 13px; font-weight: 500; color: #173404; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .card-title a { font-size: 12px; color: #639922; font-weight: 400; text-decoration: none; }
 
-.user-card { display: flex; align-items: center; gap: 9px; padding: 8px 10px; }
-.user-avt { width: 32px; height: 32px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-label { font-size: 12px; color: #5F5E5A; width: 72px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 7px; background: #EAF3DE; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; background: #3B6D11; }
+    .bar-val { font-size: 12px; color: #27500A; font-weight: 500; width: 30px; text-align: right; flex-shrink: 0; }
 
-.user-name { font-size: 12px; font-weight: 500; color: #173404; }
-.user-role { font-size: 11px; color: #639922; }
+    .appt-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid #eef5ee; }
+    .appt-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .appt-avt { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+    .appt-name { font-size: 13px; font-weight: 500; color: #173404; }
+    .appt-sub { font-size: 11px; color: #639922; margin-top: 1px; }
+    .appt-time { font-size: 12px; color: #5F5E5A; margin-left: auto; flex-shrink: 0; }
 
-.logout-btn {
-  margin-top: 10px;
-  padding: 8px;
-  background: #FCEBEB;
-  color: #791F1F;
-  text-decoration: none;
-  border-radius: 8px;
-  display: block;
-  text-align: center;
-}
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .section-title { font-size: 14px; font-weight: 500; color: #173404; }
+    .add-btn { background: #3B6D11; color: white; border: none; border-radius: 9px; padding: 8px 16px; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .add-btn:hover { background: #27500A; }
 
-.main { margin-left: 220px; flex: 1; }
+    .table-wrap { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #EAF3DE; color: #27500A; font-size: 12px; font-weight: 500; padding: 11px 16px; text-align: left; }
+    td { padding: 11px 16px; font-size: 13px; color: #2C2C2A; border-bottom: 0.5px solid #eef5ee; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f7fbf7; }
+    .patient-id { font-size: 11px; color: #639922; }
+    .patient-name { font-weight: 500; color: #173404; }
 
-.topbar {
-  background: #fff;
-  border-bottom: 0.5px solid #d4e8d4;
-  padding: 13px 26px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; display: inline-block; }
+    .badge-green  { background: #EAF3DE; color: #27500A; }
+    .badge-amber  { background: #FAEEDA; color: #633806; }
+    .badge-red    { background: #FCEBEB; color: #791F1F; }
+    .badge-blue   { background: #E6F1FB; color: #0C447C; }
 
-.top-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #EAF3DE;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.content { padding: 22px 26px; }
-</style>
+    .edit-btn { background: #EAF3DE; color: #27500A; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; text-decoration: none; margin-right: 5px; }
+    .del-btn  { background: #FCEBEB; color: #791F1F; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; text-decoration: none; }
+    .edit-btn:hover { background: #C0DD97; }
+    .del-btn:hover  { background: #F7C1C1; }
+  </style>
 </head>
-
 <body>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-
   <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+        <path d="M22 16.5a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7.5A4 4 0 0 1 6 3.5h12a4 4 0 0 1 4 4v9z"/>
+        <path d="M12 8v8M8 12h8"/>
+      </svg>
+    </div>
     <span class="logo-text">MediCare</span>
   </div>
 
-  <a href="/" class="nav-item active">Dashboard</a>
-  <a href="/patients" class="nav-item">Patients</a>
+  <a href="/" class="nav-item active">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="#27500A"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Dashboard
+  </a>
+  <a href="/patients" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    Patients
+  </a>
+  <a href="/doctors" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
+      <path d="M3 22c0-5 4-8 9-8s9 3 9 8"/>
+    </svg>
+    Doctors
+  </a>
+  <a href="/appointments" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="4" width="18" height="17" rx="2"/>
+      <path d="M8 2v4M16 2v4M3 10h18"/>
+    </svg>
+    Appointments
+  </a>
+  <a href="/reports" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="16" y2="17"/>
+    </svg>
+    Reports
+  </a>
 
   <div class="sidebar-footer">
-
-    <!-- USER -->
     <div class="user-card">
-      <div class="user-avt">
-        {{ session['user'][0] | upper if 'user' in session else 'U' }}
-      </div>
+      <div class="user-avt">DR</div>
       <div>
-        <div class="user-name">
-          {{ session['user'] if 'user' in session else 'Guest' }}
-        </div>
-        <div class="user-role">Logged User</div>
+        <div class="user-name">Dr. Admin</div>
+        <div class="user-role">Administrator</div>
       </div>
     </div>
-
-    <!-- LOGOUT -->
-    <a href="/logout" class="logout-btn">Logout</a>
-
   </div>
-
 </div>
 
 <!-- MAIN -->
@@ -103,49 +156,211 @@ body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; m
 
   <!-- TOPBAR -->
   <div class="topbar">
-
-    <div>Patient Dashboard</div>
-
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div>{{ session['user'] if 'user' in session else 'Guest' }}</div>
-
-      <div class="top-avatar">
-        {{ session['user'][0] | upper if 'user' in session else 'U' }}
+    <div class="topbar-title">Patient Dashboard</div>
+    <div class="topbar-right">
+      <form action="/search" method="GET" style="margin:0">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8ab48a" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" name="q" placeholder="Search patients...">
+        </div>
+      </form>
+      <div class="notif-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="notif-dot"></div>
       </div>
+      <div class="top-avatar">DR</div>
     </div>
-
   </div>
 
   <!-- CONTENT -->
   <div class="content">
 
-    <h3>Total Patients: {{ patients|length }}</h3>
-    <br>
+    <!-- STAT CARDS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#EAF3DE">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#EAF3DE;color:#27500A;">Active</span>
+        </div>
+        <div class="stat-value">{{ patients|length }}</div>
+        <div class="stat-label">Total patients</div>
+      </div>
 
-    <table border="1" cellpadding="10">
-      <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Disease</th>
-        <th>Actions</th>
-      </tr>
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#E1F5EE">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2">
+              <path d="M22 16.5a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7.5A4 4 0 0 1 6 3.5h12a4 4 0 0 1 4 4v9z"/>
+              <path d="M12 8v8M8 12h8"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#E1F5EE;color:#085041;">In ward</span>
+        </div>
+        <div class="stat-value">{{ admitted_count if admitted_count is defined else '--' }}</div>
+        <div class="stat-label">Admitted</div>
+      </div>
 
-      {% for p in patients %}
-      <tr>
-        <td>{{ p[1] }}</td>
-        <td>{{ p[2] }}</td>
-        <td>{{ p[3] }}</td>
-        <td>
-          <a href="/edit/{{ p[0] }}">Edit</a>
-          <a href="/delete/{{ p[0] }}">Delete</a>
-        </td>
-      </tr>
-      {% endfor %}
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#FAEEDA">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2">
+              <rect x="3" y="4" width="18" height="17" rx="2"/>
+              <path d="M8 2v4M16 2v4M3 10h18"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#FAEEDA;color:#633806;">Today</span>
+        </div>
+        <div class="stat-value">{{ opd_count if opd_count is defined else '--' }}</div>
+        <div class="stat-label">OPD visits</div>
+      </div>
 
-    </table>
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#FCEBEB">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#FCEBEB;color:#791F1F;">Alert</span>
+        </div>
+        <div class="stat-value">{{ critical_count if critical_count is defined else '--' }}</div>
+        <div class="stat-label">Critical cases</div>
+      </div>
+    </div>
+
+    <!-- MID ROW -->
+    <div class="mid-row">
+
+      <!-- Department Load -->
+      <div class="card">
+        <div class="card-title">Department load <a href="#">This week</a></div>
+        <div class="bar-row">
+          <div class="bar-label">Cardiology</div>
+          <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+          <div class="bar-val">78%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Neurology</div>
+          <div class="bar-track"><div class="bar-fill" style="width:55%;background:#639922"></div></div>
+          <div class="bar-val">55%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Pediatrics</div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%;background:#97C459"></div></div>
+          <div class="bar-val">90%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Orthopedic</div>
+          <div class="bar-track"><div class="bar-fill" style="width:42%;background:#C0DD97"></div></div>
+          <div class="bar-val">42%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">General</div>
+          <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+          <div class="bar-val">65%</div>
+        </div>
+      </div>
+
+      <!-- Appointments -->
+      <div class="card">
+        <div class="card-title">Today's appointments <a href="/appointments">View all</a></div>
+        <div class="appt-item">
+          <div class="appt-avt" style="background:#EAF3DE;color:#27500A;">RG</div>
+          <div>
+            <div class="appt-name">Ramesh Gupta</div>
+            <div class="appt-sub">Cardiology · Dr. Mehta</div>
+          </div>
+          <div class="appt-time">09:30</div>
+        </div>
+        <div class="appt-item">
+          <div class="appt-avt" style="background:#FAEEDA;color:#633806;">SS</div>
+          <div>
+            <div class="appt-name">Sunita Sharma</div>
+            <div class="appt-sub">Orthopedic · Dr. Kumar</div>
+          </div>
+          <div class="appt-time">10:15</div>
+        </div>
+        <div class="appt-item">
+          <div class="appt-avt" style="background:#E1F5EE;color:#085041;">AV</div>
+          <div>
+            <div class="appt-name">Anil Verma</div>
+            <div class="appt-sub">Neurology · Dr. Singh</div>
+          </div>
+          <div class="appt-time">11:00</div>
+        </div>
+        <div class="appt-item">
+          <div class="appt-avt" style="background:#FCEBEB;color:#791F1F;">PS</div>
+          <div>
+            <div class="appt-name">Pooja Singh</div>
+            <div class="appt-sub">Pediatrics · Dr. Riya</div>
+          </div>
+          <div class="appt-time">12:30</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENT TABLE -->
+    <div class="section-header">
+      <div class="section-title">Recent patients</div>
+      <a href="/add" class="add-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Add Patient
+      </a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Disease</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        {% for p in patients %}
+        <tr>
+          <td class="patient-id">#P{{ '%03d' % p[0] }}</td>
+          <td class="patient-name">{{ p[1] }}</td>
+          <td>{{ p[2] }}</td>
+          <td>{{ p[3] }}</td>
+          <td>
+            {% if p[4] == 'Critical' %}
+              <span class="badge badge-red">Critical</span>
+            {% elif p[4] == 'Admitted' %}
+              <span class="badge badge-amber">Admitted</span>
+            {% elif p[4] == 'Discharged' %}
+              <span class="badge badge-blue">Discharged</span>
+            {% else %}
+              <span class="badge badge-green">OPD</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="/edit/{{ p[0] }}" class="edit-btn">Edit</a>
+            <a href="/delete/{{ p[0] }}" class="del-btn">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
 
   </div>
-
 </div>
 
 </body>
