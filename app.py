@@ -8,7 +8,7 @@ app.secret_key = "secret123"
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",   # apna password daalna
+    password="Navya@MYSQL2026",   # apna password daalna
     database="hospital"
 )
 
@@ -44,7 +44,7 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        email = request.form['email']
         cursor = db.cursor()
         cursor.execute(
             "INSERT INTO users (username, password) VALUES (%s, %s)",
@@ -65,7 +65,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        email = request.form['email']
         cursor = db.cursor()
         cursor.execute(
             "SELECT * FROM users WHERE username=%s AND password=%s",
@@ -74,7 +74,7 @@ def login():
         user = cursor.fetchone()
 
         if user:
-            session['user'] = username
+            session['user'] = email
             return redirect('/')
         else:
             return "Invalid username or password ❌"
