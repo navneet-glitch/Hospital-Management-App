@@ -47,8 +47,8 @@ def signup():
         email = request.form['email']
         cursor = db.cursor()
         cursor.execute(
-            "INSERT INTO users (username, password) VALUES (%s, %s)",
-            (username, password)
+            "INSERT INTO users (email, username, password) VALUES (%s, %s, %s)",
+            (email, username, password)
         )
         db.commit()
 
@@ -68,8 +68,8 @@ def login():
         email = request.form['email']
         cursor = db.cursor()
         cursor.execute(
-            "SELECT * FROM users WHERE username=%s AND password=%s",
-            (username, password)
+            "SELECT * FROM users WHERE email=%s AND password=%s",
+            (email, password)
         )
         user = cursor.fetchone()
 
@@ -77,7 +77,7 @@ def login():
             session['user'] = email
             return redirect('/')
         else:
-            return "Invalid username or password ❌"
+            return "Invalid email or password ❌"
 
     return render_template('login.html')
 
