@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctors 🏥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; min-height: 100vh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; padding: 4px 8px 22px; }
+    .logo-icon { width: 34px; height: 34px; background: #EAF3DE; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 15px; font-weight: 500; color: #27500A; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; font-size: 13px; color: #5F5E5A; cursor: pointer; text-decoration: none; }
+    .nav-item:hover { background: #f0faf5; color: #27500A; }
+    .nav-item.active { background: #EAF3DE; color: #27500A; font-weight: 500; }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 0.5px solid #d4e8d4; }
+    .user-card { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 10px; }
+    .user-avt { width: 32px; height: 32px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+    .user-name { font-size: 12px; font-weight: 500; color: #173404; }
+    .user-role { font-size: 11px; color: #639922; }
+
+    /* ── MAIN ── */
+    .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: #fff; border-bottom: 0.5px solid #d4e8d4; padding: 13px 26px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-size: 15px; font-weight: 500; color: #173404; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .search-wrap { display: flex; align-items: center; gap: 8px; background: #f7fbf7; border: 0.5px solid #c8e8c8; border-radius: 9px; padding: 7px 13px; }
+    .search-wrap input { border: none; outline: none; background: transparent; font-family: 'Poppins', sans-serif; font-size: 13px; color: #27500A; width: 180px; }
+    .search-wrap input::placeholder { color: #8ab48a; }
+    .notif-btn { width: 34px; height: 34px; border-radius: 50%; background: #f7fbf7; border: 0.5px solid #c8e8c8; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+    .notif-dot { width: 7px; height: 7px; background: #E24B4A; border-radius: 50%; position: absolute; top: 6px; right: 6px; }
+    .top-avatar { width: 34px; height: 34px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; }
+
+    /* ── CONTENT ── */
+    .content { padding: 22px 26px; }
+
+    /* ── STAT CARDS ── */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-bottom: 22px; }
+    .stat-card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; padding: 15px 16px; }
+    .stat-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .stat-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .stat-badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .stat-value { font-size: 24px; font-weight: 500; color: #173404; margin: 10px 0 2px; }
+    .stat-label { font-size: 12px; color: #639922; }
+
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .section-title { font-size: 14px; font-weight: 500; color: #173404; }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .filter-select { border: 0.5px solid #c8e8c8; border-radius: 8px; padding: 7px 12px; font-family: 'Poppins', sans-serif; font-size: 12px; color: #3B6D11; background: #fff; outline: none; cursor: pointer; }
+    .add-btn { background: #3B6D11; color: white; border: none; border-radius: 9px; padding: 8px 16px; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .add-btn:hover { background: #27500A; }
+
+    /* ── DOCTOR CARDS GRID ── */
+    .doctors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+
+    .doctor-card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 14px; padding: 20px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .doc-avt { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; margin-bottom: 12px; flex-shrink: 0; }
+    .doc-name { font-size: 14px; font-weight: 500; color: #173404; margin-bottom: 3px; }
+    .doc-spec { font-size: 12px; color: #639922; margin-bottom: 12px; }
+    .doc-meta { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .doc-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: #EAF3DE; color: #27500A; }
+    .doc-divider { width: 100%; border: none; border-top: 0.5px solid #eef5ee; margin-bottom: 14px; }
+    .doc-stats { display: flex; justify-content: space-around; width: 100%; margin-bottom: 16px; }
+    .doc-stat-val { font-size: 16px; font-weight: 500; color: #173404; }
+    .doc-stat-lbl { font-size: 11px; color: #639922; margin-top: 2px; }
+    .doc-actions { display: flex; gap: 8px; width: 100%; }
+    .btn-view { flex: 1; padding: 8px; background: #EAF3DE; color: #27500A; border: none; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-view:hover { background: #C0DD97; }
+    .btn-edit { flex: 1; padding: 8px; background: #FAEEDA; color: #633806; border: none; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-edit:hover { background: #FAC775; }
+    .btn-del { padding: 8px 12px; background: #FCEBEB; color: #791F1F; border: none; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+    .btn-del:hover { background: #F7C1C1; }
+
+    /* STATUS DOT */
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+    .dot-green { background: #3B6D11; }
+    .dot-gray  { background: #B4B2A9; }
+
+    /* ── TABLE ── */
+    .table-wrap { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #EAF3DE; color: #27500A; font-size: 12px; font-weight: 500; padding: 11px 16px; text-align: left; }
+    td { padding: 11px 16px; font-size: 13px; color: #2C2C2A; border-bottom: 0.5px solid #eef5ee; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f7fbf7; }
+    .doc-id { font-size: 11px; color: #639922; }
+    .doc-name-cell { font-weight: 500; color: #173404; }
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; display: inline-block; }
+    .badge-green  { background: #EAF3DE; color: #27500A; }
+    .badge-gray   { background: #F1EFE8; color: #5F5E5A; }
+    .badge-amber  { background: #FAEEDA; color: #633806; }
+    .edit-btn { background: #EAF3DE; color: #27500A; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; text-decoration: none; margin-right: 5px; }
+    .edit-btn:hover { background: #C0DD97; }
+    .del-btn { background: #FCEBEB; color: #791F1F; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; text-decoration: none; }
+    .del-btn:hover { background: #F7C1C1; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+        <path d="M22 16.5a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7.5A4 4 0 0 1 6 3.5h12a4 4 0 0 1 4 4v9z"/>
+        <path d="M12 8v8M8 12h8"/>
+      </svg>
+    </div>
+    <span class="logo-text">MediCare</span>
+  </div>
+
+  <a href="/" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Dashboard
+  </a>
+  <a href="/patients" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    Patients
+  </a>
+  <a href="/doctors" class="nav-item active">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
+      <path d="M3 22c0-5 4-8 9-8s9 3 9 8"/>
+    </svg>
+    Doctors
+  </a>
+  <a href="/appointments" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="4" width="18" height="17" rx="2"/>
+      <path d="M8 2v4M16 2v4M3 10h18"/>
+    </svg>
+    Appointments
+  </a>
+  <a href="/reports" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="16" y2="17"/>
+    </svg>
+    Reports
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avt">DR</div>
+      <div>
+        <div class="user-name">Dr. Admin</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">Doctors</div>
+    <div class="topbar-right">
+      <form action="/doctors/search" method="GET" style="margin:0">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8ab48a" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" name="q" placeholder="Search doctors...">
+        </div>
+      </form>
+      <div class="notif-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="top-avatar">DR</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STAT CARDS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#EAF3DE">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+              <path d="M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
+              <path d="M3 22c0-5 4-8 9-8s9 3 9 8"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#EAF3DE;color:#27500A;">Total</span>
+        </div>
+        <div class="stat-value">{{ doctors|length if doctors is defined else '24' }}</div>
+        <div class="stat-label">Total doctors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#E1F5EE">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#E1F5EE;color:#085041;">On duty</span>
+        </div>
+        <div class="stat-value">{{ on_duty if on_duty is defined else '18' }}</div>
+        <div class="stat-label">Available today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#FAEEDA">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2">
+              <rect x="3" y="4" width="18" height="17" rx="2"/>
+              <path d="M8 2v4M16 2v4M3 10h18"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#FAEEDA;color:#633806;">Today</span>
+        </div>
+        <div class="stat-value">{{ appointments_today if appointments_today is defined else '43' }}</div>
+        <div class="stat-label">Appointments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#FCEBEB">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="23" y1="18" x2="17" y2="18"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#FCEBEB;color:#791F1F;">Leave</span>
+        </div>
+        <div class="stat-value">{{ on_leave if on_leave is defined else '6' }}</div>
+        <div class="stat-label">On leave</div>
+      </div>
+    </div>
+
+    <!-- DOCTOR CARDS -->
+    <div class="section-header">
+      <div class="section-title">All doctors</div>
+      <div class="header-actions">
+        <select class="filter-select">
+          <option value="">All departments</option>
+          <option value="cardiology">Cardiology</option>
+          <option value="neurology">Neurology</option>
+          <option value="pediatrics">Pediatrics</option>
+          <option value="orthopedic">Orthopedic</option>
+          <option value="general">General</option>
+        </select>
+        <a href="/doctors/add" class="add-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Doctor
+        </a>
+      </div>
+    </div>
+
+    {% if doctors is defined and doctors %}
+      <div class="doctors-grid">
+        {% for d in doctors %}
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#EAF3DE;color:#27500A;">
+            {{ d[1][:2].upper() }}
+          </div>
+          <div class="doc-name">{{ d[1] }}</div>
+          <div class="doc-spec">{{ d[2] }}</div>
+          <div class="doc-meta">
+            <span class="doc-tag">{{ d[3] }}</span>
+            <span class="doc-tag">
+              <span class="status-dot {{ 'dot-green' if d[4] == 'Available' else 'dot-gray' }}"></span>
+              {{ d[4] }}
+            </span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div>
+              <div class="doc-stat-val">{{ d[5] if d[5] is defined else '--' }}</div>
+              <div class="doc-stat-lbl">Patients</div>
+            </div>
+            <div>
+              <div class="doc-stat-val">{{ d[6] if d[6] is defined else '--' }}</div>
+              <div class="doc-stat-lbl">Years exp.</div>
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a href="/doctors/view/{{ d[0] }}" class="btn-view">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              View
+            </a>
+            <a href="/doctors/edit/{{ d[0] }}" class="btn-edit">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </a>
+            <a href="/doctors/delete/{{ d[0] }}" class="btn-del">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <!-- SAMPLE CARDS (jab doctors variable nahi hai Flask se) -->
+      <div class="doctors-grid">
+
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#EAF3DE;color:#27500A;">PM</div>
+          <div class="doc-name">Dr. Priya Mehta</div>
+          <div class="doc-spec">Cardiologist</div>
+          <div class="doc-meta">
+            <span class="doc-tag">Cardiology</span>
+            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div><div class="doc-stat-val">128</div><div class="doc-stat-lbl">Patients</div></div>
+            <div><div class="doc-stat-val">12</div><div class="doc-stat-lbl">Years exp.</div></div>
+          </div>
+          <div class="doc-actions">
+            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
+            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
+            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
+          </div>
+        </div>
+
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#E1F5EE;color:#085041;">AK</div>
+          <div class="doc-name">Dr. Arjun Kumar</div>
+          <div class="doc-spec">Neuro Surgeon</div>
+          <div class="doc-meta">
+            <span class="doc-tag">Neurology</span>
+            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div><div class="doc-stat-val">95</div><div class="doc-stat-lbl">Patients</div></div>
+            <div><div class="doc-stat-val">9</div><div class="doc-stat-lbl">Years exp.</div></div>
+          </div>
+          <div class="doc-actions">
+            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
+            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
+            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
+          </div>
+        </div>
+
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#FAEEDA;color:#633806;">SV</div>
+          <div class="doc-name">Dr. Sneha Verma</div>
+          <div class="doc-spec">Pediatrician</div>
+          <div class="doc-meta">
+            <span class="doc-tag">Pediatrics</span>
+            <span class="doc-tag"><span class="status-dot dot-gray"></span>On leave</span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div><div class="doc-stat-val">74</div><div class="doc-stat-lbl">Patients</div></div>
+            <div><div class="doc-stat-val">7</div><div class="doc-stat-lbl">Years exp.</div></div>
+          </div>
+          <div class="doc-actions">
+            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
+            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
+            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
+          </div>
+        </div>
+
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#FCEBEB;color:#791F1F;">RS</div>
+          <div class="doc-name">Dr. Rahul Singh</div>
+          <div class="doc-spec">Orthopedic Surgeon</div>
+          <div class="doc-meta">
+            <span class="doc-tag">Orthopedic</span>
+            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div><div class="doc-stat-val">110</div><div class="doc-stat-lbl">Patients</div></div>
+            <div><div class="doc-stat-val">15</div><div class="doc-stat-lbl">Years exp.</div></div>
+          </div>
+          <div class="doc-actions">
+            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
+            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
+            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
+          </div>
+        </div>
+
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#EEEDFE;color:#534AB7;">NA</div>
+          <div class="doc-name">Dr. Neha Agarwal</div>
+          <div class="doc-spec">General Physician</div>
+          <div class="doc-meta">
+            <span class="doc-tag">General</span>
+            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div><div class="doc-stat-val">201</div><div class="doc-stat-lbl">Patients</div></div>
+            <div><div class="doc-stat-val">6</div><div class="doc-stat-lbl">Years exp.</div></div>
+          </div>
+          <div class="doc-actions">
+            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
+            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
+            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
+          </div>
+        </div>
+
+        <div class="doctor-card">
+          <div class="doc-avt" style="background:#E1F5EE;color:#085041;">MR</div>
+          <div class="doc-name">Dr. Mohit Rao</div>
+          <div class="doc-spec">Dermatologist</div>
+          <div class="doc-meta">
+            <span class="doc-tag">Dermatology</span>
+            <span class="doc-tag"><span class="status-dot dot-gray"></span>On leave</span>
+          </div>
+          <hr class="doc-divider">
+          <div class="doc-stats">
+            <div><div class="doc-stat-val">88</div><div class="doc-stat-lbl">Patients</div></div>
+            <div><div class="doc-stat-val">5</div><div class="doc-stat-lbl">Years exp.</div></div>
+          </div>
+          <div class="doc-actions">
+            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
+            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
+            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
+          </div>
+        </div>
+
+      </div>
+    {% endif %}
+
+    <!-- TABLE -->
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-title">Doctors list</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Specialization</th>
+          <th>Department</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        {% if doctors is defined and doctors %}
+          {% for d in doctors %}
+          <tr>
+            <td class="doc-id">#D{{ '%03d' % d[0] }}</td>
+            <td class="doc-name-cell">{{ d[1] }}</td>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[3] }}</td>
+            <td>
+              {% if d[4] == 'Available' %}
+                <span class="badge badge-green">Available</span>
+              {% elif d[4] == 'On leave' %}
+                <span class="badge badge-gray">On leave</span>
+              {% else %}
+                <span class="badge badge-amber">{{ d[4] }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="/doctors/edit/{{ d[0] }}" class="edit-btn">Edit</a>
+              <a href="/doctors/delete/{{ d[0] }}" class="del-btn">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td class="doc-id">#D001</td>
+            <td class="doc-name-cell">Dr. Priya Mehta</td>
+            <td>Cardiologist</td>
+            <td>Cardiology</td>
+            <td><span class="badge badge-green">Available</span></td>
+            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
+          </tr>
+          <tr>
+            <td class="doc-id">#D002</td>
+            <td class="doc-name-cell">Dr. Arjun Kumar</td>
+            <td>Neuro Surgeon</td>
+            <td>Neurology</td>
+            <td><span class="badge badge-green">Available</span></td>
+            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
+          </tr>
+          <tr>
+            <td class="doc-id">#D003</td>
+            <td class="doc-name-cell">Dr. Sneha Verma</td>
+            <td>Pediatrician</td>
+            <td>Pediatrics</td>
+            <td><span class="badge badge-gray">On leave</span></td>
+            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
+          </tr>
+          <tr>
+            <td class="doc-id">#D004</td>
+            <td class="doc-name-cell">Dr. Rahul Singh</td>
+            <td>Orthopedic Surgeon</td>
+            <td>Orthopedic</td>
+            <td><span class="badge badge-green">Available</span></td>
+            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
+          </tr>
+          <tr>
+            <td class="doc-id">#D005</td>
+            <td class="doc-name-cell">Dr. Neha Agarwal</td>
+            <td>General Physician</td>
+            <td>General</td>
+            <td><span class="badge badge-green">Available</span></td>
+            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
+          </tr>
+          <tr>
+            <td class="doc-id">#D006</td>
+            <td class="doc-name-cell">Dr. Mohit Rao</td>
+            <td>Dermatologist</td>
+            <td>Dermatology</td>
+            <td><span class="badge badge-gray">On leave</span></td>
+            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
+          </tr>
+        {% endif %}
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
