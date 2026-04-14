@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Doctor 🏥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; min-height: 100vh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; padding: 4px 8px 22px; }
+    .logo-icon { width: 34px; height: 34px; background: #EAF3DE; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 15px; font-weight: 500; color: #27500A; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; font-size: 13px; color: #5F5E5A; cursor: pointer; text-decoration: none; }
+    .nav-item:hover { background: #f0faf5; color: #27500A; }
+    .nav-item.active { background: #EAF3DE; color: #27500A; font-weight: 500; }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 0.5px solid #d4e8d4; }
+    .user-card { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 10px; }
+    .user-avt { width: 32px; height: 32px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+    .user-name { font-size: 12px; font-weight: 500; color: #173404; }
+    .user-role { font-size: 11px; color: #639922; }
+
+    /* ── MAIN ── */
+    .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: #fff; border-bottom: 0.5px solid #d4e8d4; padding: 13px 26px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-size: 15px; font-weight: 500; color: #173404; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .notif-btn { width: 34px; height: 34px; border-radius: 50%; background: #f7fbf7; border: 0.5px solid #c8e8c8; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+    .notif-dot { width: 7px; height: 7px; background: #E24B4A; border-radius: 50%; position: absolute; top: 6px; right: 6px; }
+    .top-avatar { width: 34px; height: 34px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; }
+
+    /* ── CONTENT ── */
+    .content { padding: 32px 26px; display: flex; justify-content: center; }
+
+    /* ── FORM CARD ── */
+    .form-card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 16px; padding: 32px 36px; width: 100%; max-width: 560px; }
+
+    .form-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .form-header-icon { width: 44px; height: 44px; background: #EAF3DE; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .form-header h2 { font-size: 16px; font-weight: 500; color: #173404; }
+    .form-header p { font-size: 12px; color: #639922; margin-top: 2px; }
+
+    /* AVATAR PREVIEW */
+    .avatar-section { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding: 16px; background: #f7fbf7; border: 0.5px solid #d4e8d4; border-radius: 12px; }
+    .avatar-preview { width: 56px; height: 56px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; flex-shrink: 0; }
+    .avatar-info p:first-child { font-size: 13px; font-weight: 500; color: #173404; }
+    .avatar-info p:last-child { font-size: 12px; color: #639922; margin-top: 2px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 500; color: #3B6D11; margin-bottom: 6px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 0.5px solid #c8e8c8;
+      border-radius: 9px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      color: #173404;
+      background: #f7fbf7;
+      outline: none;
+      transition: border 0.2s, background 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: #3B6D11; background: #fff; }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #a8c8a8; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    .section-label { font-size: 12px; font-weight: 500; color: #3B6D11; margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 0.5px solid #d4e8d4; }
+
+    .divider { border: none; border-top: 0.5px solid #d4e8d4; margin: 24px 0; }
+
+    /* AVAILABILITY TOGGLE */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f7fbf7; border: 0.5px solid #d4e8d4; border-radius: 9px; margin-bottom: 16px; }
+    .toggle-label { font-size: 13px; color: #173404; }
+    .toggle-label span { font-size: 11px; color: #639922; display: block; margin-top: 2px; }
+    .toggle { position: relative; width: 40px; height: 22px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #d4e8d4; border-radius: 22px; transition: 0.2s; }
+    .toggle-slider:before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+    .toggle input:checked + .toggle-slider { background: #3B6D11; }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-save { flex: 1; padding: 11px; background: #3B6D11; color: white; border: none; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; }
+    .btn-save:hover { background: #27500A; }
+    .btn-back { padding: 11px 20px; background: #f7fbf7; color: #3B6D11; border: 0.5px solid #c8e8c8; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .btn-back:hover { background: #EAF3DE; }
+    .btn-reset { padding: 11px 16px; background: #f7fbf7; color: #5F5E5A; border: 0.5px solid #d4e8d4; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .btn-reset:hover { background: #F1EFE8; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+        <path d="M22 16.5a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7.5A4 4 0 0 1 6 3.5h12a4 4 0 0 1 4 4v9z"/>
+        <path d="M12 8v8M8 12h8"/>
+      </svg>
+    </div>
+    <span class="logo-text">MediCare</span>
+  </div>
+
+  <a href="/" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Dashboard
+  </a>
+  <a href="/patients" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    Patients
+  </a>
+  <a href="/doctors" class="nav-item active">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
+      <path d="M3 22c0-5 4-8 9-8s9 3 9 8"/>
+    </svg>
+    Doctors
+  </a>
+  <a href="/appointments" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="4" width="18" height="17" rx="2"/>
+      <path d="M8 2v4M16 2v4M3 10h18"/>
+    </svg>
+    Appointments
+  </a>
+  <a href="/reports" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="16" y2="17"/>
+    </svg>
+    Reports
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avt">DR</div>
+      <div>
+        <div class="user-name">Dr. Admin</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">Add New Doctor</div>
+    <div class="topbar-right">
+      <div class="notif-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="top-avatar">DR</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="form-card">
+
+      <!-- FORM HEADER -->
+      <div class="form-header">
+        <div class="form-header-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+            <path d="M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
+            <path d="M3 22c0-5 4-8 9-8s9 3 9 8"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="16" y1="11" x2="22" y2="11"/>
+          </svg>
+        </div>
+        <div>
+          <h2>Add New Doctor</h2>
+          <p>Fill in the details to register a new doctor</p>
+        </div>
+      </div>
+
+      <!-- AVATAR PREVIEW -->
+      <div class="avatar-section">
+        <div class="avatar-preview" id="avatarPreview">DR</div>
+        <div class="avatar-info">
+          <p id="previewName">Doctor Name</p>
+          <p id="previewSpec">Specialization</p>
+        </div>
+      </div>
+
+      <form method="POST" action="/doctors/add">
+
+        <!-- PERSONAL INFO -->
+        <div class="section-label">Personal information</div>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="name" id="nameInput" placeholder="e.g. Dr. Priya Mehta" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gender</label>
+            <select name="gender">
+              <option value="" disabled selected>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" name="age" placeholder="e.g. 38" min="20" max="80">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" name="phone" placeholder="e.g. 9876543210">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="e.g. dr.priya@hospital.com">
+          </div>
+        </div>
+
+        <!-- PROFESSIONAL INFO -->
+        <div class="section-label">Professional details</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Specialization</label>
+            <input type="text" name="specialization" id="specInput" placeholder="e.g. Cardiologist" required>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select name="department" required>
+              <option value="" disabled selected>Select dept.</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Orthopedic">Orthopedic</option>
+              <option value="General">General</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Gynecology">Gynecology</option>
+              <option value="ENT">ENT</option>
+              <option value="Ophthalmology">Ophthalmology</option>
+              <option value="Psychiatry">Psychiatry</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Qualification</label>
+            <input type="text" name="qualification" placeholder="e.g. MBBS, MD">
+          </div>
+          <div class="form-group">
+            <label>Experience (years)</label>
+            <input type="number" name="experience" placeholder="e.g. 10" min="0" max="60">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Registration Number</label>
+          <input type="text" name="reg_number" placeholder="e.g. MCI-2024-12345">
+        </div>
+
+        <!-- SCHEDULE -->
+        <div class="section-label">Schedule &amp; availability</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Shift</label>
+            <select name="shift">
+              <option value="" disabled selected>Select shift</option>
+              <option value="Morning">Morning (8am – 2pm)</option>
+              <option value="Evening">Evening (2pm – 8pm)</option>
+              <option value="Night">Night (8pm – 8am)</option>
+              <option value="Full">Full day</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>OPD Days</label>
+            <select name="opd_days">
+              <option value="" disabled selected>Select days</option>
+              <option value="Mon-Fri">Mon – Fri</option>
+              <option value="Mon-Sat">Mon – Sat</option>
+              <option value="Alternate">Alternate days</option>
+              <option value="Weekends">Weekends only</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div class="toggle-label">
+            Currently available
+            <span>Mark doctor as available for appointments</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" name="available" value="Available" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- NOTES -->
+        <div class="section-label">Additional notes</div>
+        <div class="form-group">
+          <label>Notes (optional)</label>
+          <textarea name="notes" placeholder="Any additional info about this doctor..."></textarea>
+        </div>
+
+        <hr class="divider">
+
+        <!-- BUTTONS -->
+        <div class="btn-row">
+          <a href="/doctors" class="btn-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Back
+          </a>
+          <button type="reset" class="btn-reset">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
+            </svg>
+            Reset
+          </button>
+          <button type="submit" class="btn-save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save Doctor
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const nameInput = document.getElementById('nameInput');
+  const specInput = document.getElementById('specInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const previewName = document.getElementById('previewName');
+  const previewSpec = document.getElementById('previewSpec');
+
+  nameInput.addEventListener('input', function() {
+    const val = this.value.trim();
+    previewName.textContent = val || 'Doctor Name';
+    if (val) {
+      const words = val.replace(/^Dr\.?\s*/i, '').split(' ');
+      const initials = words.map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      avatarPreview.textContent = initials || 'DR';
+    } else {
+      avatarPreview.textContent = 'DR';
+    }
+  });
+
+  specInput.addEventListener('input', function() {
+    previewSpec.textContent = this.value.trim() || 'Specialization';
+  });
+</script>
+
+</body>
+</html>
