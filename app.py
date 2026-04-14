@@ -194,6 +194,25 @@ def edit_doctor(id):
     doctor = cursor.fetchone()
     return render_template('edit doctors.html', d=doctor)
 
+@app.route('/add_doctor', methods=['GET', 'POST'])
+@login_required
+def add_doctor():
+    if request.method == 'POST':
+        name = request.form['name']
+        specialization = request.form['specialization']
+        phone = request.form['phone']
+
+        cursor = db.cursor()
+        cursor.execute(
+            "INSERT INTO doctors (name, specialization, phone) VALUES (%s, %s, %s)",
+            (name, specialization, phone)
+        )
+        db.commit()
+
+        return redirect('/doctors')
+
+    return render_template('add_doctors.html')
+
 @app.route('/delete_doctor/<int:id>')
 @login_required
 def delete_doctor(id):
