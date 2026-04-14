@@ -173,6 +173,35 @@ def doctors():
     data = cursor.fetchall()
     return render_template('doctors.html', doctors=data)
 
+@app.route('/edit_doctor/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_doctor(id):
+    cursor = db.cursor()
+
+    if request.method == 'POST':
+        name = request.form['name']
+        specialization = request.form['specialization']
+        phone = request.form['phone']
+
+        cursor.execute(
+            "UPDATE doctors SET name=%s, specialization=%s, phone=%s WHERE id=%s",
+            (name, specialization, phone, id)
+        )
+        db.commit()
+        return redirect('/doctors')
+
+    cursor.execute("SELECT * FROM doctors WHERE id=%s", (id,))
+    doctor = cursor.fetchone()
+    return render_template('edit doctors.html', d=doctor)
+
+@app.route('/delete_doctor/<int:id>')
+@login_required
+def delete_doctor(id):
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM doctors WHERE id=%s", (id,))
+    db.commit()
+    return redirect('/doctors')
+
 
 # ===========================
 # RUN APP
