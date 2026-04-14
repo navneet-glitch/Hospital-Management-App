@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Doctor ✏️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  background: #f7fbf7;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #fff;
+  border-right: 0.5px solid #d4e8d4;
+  padding: 20px 14px;
+  position: fixed;
+  height: 100vh;
+}
+
+.logo {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  background: #EAF3DE;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #27500A;
+}
+
+.nav-item {
+  display: block;
+  padding: 10px;
+  border-radius: 10px;
+  color: #5F5E5A;
+  text-decoration: none;
+}
+
+.nav-item.active {
+  background: #EAF3DE;
+  color: #27500A;
+}
+
+/* MAIN */
+.main {
+  margin-left: 220px;
+  width: 100%;
+}
+
+/* TOPBAR */
+.topbar {
+  background: white;
+  padding: 15px 25px;
+  border-bottom: 1px solid #eee;
+  font-weight: 500;
+}
+
+/* CONTENT */
+.content {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* FORM */
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid #d4e8d4;
+}
+
+.card h2 {
+  margin-bottom: 20px;
+  color: #173404;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #27500A;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #c8e8c8;
+  background: #f7fbf7;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+}
+
+input:focus, textarea:focus {
+  border-color: #3B6D11;
+  background: white;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #3B6D11;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #27500A;
+}
+
+.back {
+  display: block;
+  margin-top: 15px;
+  text-decoration: none;
+  color: #3B6D11;
+  font-size: 13px;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🏥</div>
+    <div class="logo-text">MediCare</div>
+  </div>
+
+  <a href="/" class="nav-item">Dashboard</a>
+  <a href="/" class="nav-item">Patients</a>
+  <a href="/doctors" class="nav-item active">Doctors</a>
+  <a href="/" class="nav-item">Appointments</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">Edit Doctor</div>
+
+  <div class="content">
+    <div class="card">
+
+      <h2>Update Doctor Details ✏️</h2>
+
+      <form method="POST">
+        <div class="form-group">
+          <label for="name">Doctor Name</label>
+          <input type="text" id="name" name="name" value="{{ d[1] }}" required></input>
+        </div>
+
+        <div class="form-group">
+          <label for="specialty">Specialty</label>
+          <input type="text" id="specialty" name="specialty" value="{{ d[2] }}" required></input>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" value="{{ d[3] }}" required></input>
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Years of Experience</label>
+          <input type="number" id="experience" name="experience" value="{{ d[4] }}" required></input>
+        </div>
+
+        <button type="submit">Update Doctor</button>
+      </form>
+
+      <a href="/doctors" class="back">⬅ Back</a>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
