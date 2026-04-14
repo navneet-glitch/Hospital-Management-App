@@ -165,6 +165,14 @@ def search():
     data = cursor.fetchall()
     return render_template('index.html', patients=data)
 
+@app.route('/doctors')
+@login_required
+def doctors():
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM doctors")
+    data = cursor.fetchall()
+    return render_template('doctors.html', doctors=data)
+
 
 # ===========================
 # RUN APP
