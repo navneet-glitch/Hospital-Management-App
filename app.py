@@ -221,6 +221,86 @@ def delete_doctor(id):
     db.commit()
     return redirect('/doctors')
 
+@app.route('/appointments')
+@login_required
+def appointments():
+    cursor = db.cursor()
+
+    cursor.execute("""
+        SELECT a.id, p.name, d.name, a.date, a.time
+        FROM appointments a
+        JOIN patients p ON a.patient_id = p.id
+        JOIN doctors d ON a.doctor_id = d.id
+    """)
+
+    data = cursor.fetchall()
+    return render_template('appointments.html', appointments=data)
+
+@app.route('/add_appointment', methods=['GET', 'POST'])
+@login_required
+def add_appointment():
+    cursor = db.cursor()
+
+    if request.method == 'POST':
+        patient_id = request.form['patient_id']
+        doctor_id = request.form['doctor_id']
+        date = request.form['date']
+        time = request.form['time']
+
+        cursor.execute(
+            "INSERT INTO appointments (patient_id, doctor_id, date, time) VALUES (%s, %s, %s, %s)",
+            (patient_id, doctor_id, date, time)
+        )
+        db.commit()
+
+        return redirect('/appointments')
+
+    # dropdown data
+    cursor.execute("SELECT * FROM patients")
+    patients = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM doctors")
+    doctors = cursor.fetchall()
+
+    return render_template('add_appointment.html', patients=patients, doctors=doctors)
+
+@app.route('/edit_appointment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_appointment(id):
+    cursor = db.cursor()
+
+    if request.method == 'POST':
+        patient_id = request.form['patient_id']
+        doctor_id = request.form['doctor_id']
+        date = request.form['date']
+        time = request.form['time']
+
+        cursor.execute(
+            "UPDATE appointments SET patient_id=%s, doctor_id=%s, date=%s, time=%s WHERE id=%s",
+            (patient_id, doctor_id, date, time, id)
+        )
+        db.commit()
+        return redirect('/appointments')
+
+    cursor.execute("SELECT * FROM appointments WHERE id=%s", (id,))
+    appointment = cursor.fetchone()
+
+    cursor.execute("SELECT * FROM patients")
+    patients = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM doctors")
+    doctors = cursor.fetchall()
+
+    return render_template('edit_appointment.html', a=appointment, patients=patients, doctors=doctors)
+
+@app.route('/delete_appointment/<int:id>')
+@login_required
+def delete_appointment(id):
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM appointments WHERE id=%s", (id,))
+    db.commit()
+    return redirect('/appointments')
+
 
 # ===========================
 # RUN APP
