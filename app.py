@@ -32,8 +32,34 @@ def login_required(func):
 def index():
     cursor = db.cursor()
     cursor.execute("SELECT * FROM patients")
-    data = cursor.fetchall()
-    return render_template('index.html', patients=data)
+    patients = cursor.fetchall()
+    
+    # Get statistics
+    cursor.execute("SELECT COUNT(*) FROM patients WHERE status='Admitted'")
+    admitted_count = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM patients WHERE status='OPD'")
+    opd_count = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM patients WHERE status='Critical'")
+    critical_count = cursor.fetchone()[0]
+    
+    # Get today's appointments
+    cursor.execute("""
+        SELECT a.id, p.name, d.name, a.date, a.time, a.department
+        FROM appointments a
+        JOIN patients p ON a.patient_id = p.id
+        JOIN doctors d ON a.doctor_id = d.id
+        LIMIT 4
+    """)
+    today_appointments = cursor.fetchall()
+    
+    return render_template('index.html', 
+                         patients=patients,
+                         today_appointments=today_appointments,
+                         admitted_count=admitted_count,
+                         opd_count=opd_count,
+                         critical_count=critical_count)
 
 
 # ===========================
@@ -227,14 +253,33 @@ def appointments():
     cursor = db.cursor()
 
     cursor.execute("""
-        SELECT a.id, p.name, d.name, a.date, a.time
+        SELECT a.id, p.name, d.name, a.department, a.date, a.time, p.id, a.type, a.status
         FROM appointments a
         JOIN patients p ON a.patient_id = p.id
         JOIN doctors d ON a.doctor_id = d.id
     """)
 
     data = cursor.fetchall()
-    return render_template('appointments.html', appointments=data)
+    
+    # Get statistics
+    cursor.execute("SELECT COUNT(*) FROM appointments")
+    today_count = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM appointments WHERE status='Completed'")
+    completed = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM appointments WHERE status='Pending'")
+    pending = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM appointments WHERE status='Cancelled'")
+    cancelled = cursor.fetchone()[0]
+    
+    return render_template('appointments.html', 
+                         appointments=data,
+                         today_count=today_count,
+                         completed=completed,
+                         pending=pending,
+                         cancelled=cancelled)
 
 @app.route('/add_appointment', methods=['GET', 'POST'])
 @login_required
@@ -300,6 +345,41 @@ def delete_appointment(id):
     cursor.execute("DELETE FROM appointments WHERE id=%s", (id,))
     db.commit()
     return redirect('/appointments')
+
+
+# ===========================
+# REPORTS
+# ===========================
+@app.route('/reports')
+@login_required
+def reports():
+    cursor = db.cursor()
+    
+    # Get all reports
+    cursor.execute("""
+        SELECT r.id, p.name, d.name, r.report_type, r.date, r.status
+        FROM reports r
+        JOIN patients p ON r.patient_id = p.id
+        JOIN doctors d ON r.doctor_id = d.id
+        ORDER BY r.date DESC
+    """)
+    reports_data = cursor.fetchall()
+    
+    # Get statistics
+    cursor.execute("SELECT COUNT(*) FROM reports")
+    total_reports = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Completed'")
+    completed_reports = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
+    pending_reports = cursor.fetchone()[0]
+    
+    return render_template('reports.html', 
+                         reports=reports_data,
+                         total_reports=total_reports,
+                         completed_reports=completed_reports,
+                         pending_reports=pending_reports)
 
 
 # ===========================

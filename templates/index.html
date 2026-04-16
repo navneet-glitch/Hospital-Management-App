@@ -277,38 +277,22 @@
       <!-- Appointments -->
       <div class="card">
         <div class="card-title">Today's appointments <a href="/appointments">View all</a></div>
-        <div class="appt-item">
-          <div class="appt-avt" style="background:#EAF3DE;color:#27500A;">RG</div>
-          <div>
-            <div class="appt-name">Ramesh Gupta</div>
-            <div class="appt-sub">Cardiology · Dr. Mehta</div>
+        {% if today_appointments is defined and today_appointments %}
+          {% for a in today_appointments %}
+          <div class="appt-item">
+            <div class="appt-avt" style="background:#EAF3DE;color:#27500A;">{{ a[1][:2].upper() }}</div>
+            <div>
+              <div class="appt-name">{{ a[1] }}</div>
+              <div class="appt-sub">{{ a[5] }} · Dr. {{ a[2].split()[-1] }}</div>
+            </div>
+            <div class="appt-time">{{ a[4] }}</div>
           </div>
-          <div class="appt-time">09:30</div>
-        </div>
-        <div class="appt-item">
-          <div class="appt-avt" style="background:#FAEEDA;color:#633806;">SS</div>
-          <div>
-            <div class="appt-name">Sunita Sharma</div>
-            <div class="appt-sub">Orthopedic · Dr. Kumar</div>
+          {% endfor %}
+        {% else %}
+          <div class="appt-item">
+            <div style="font-size: 12px; color: #639922; text-align: center; width: 100%; padding: 20px 0;">No appointments scheduled</div>
           </div>
-          <div class="appt-time">10:15</div>
-        </div>
-        <div class="appt-item">
-          <div class="appt-avt" style="background:#E1F5EE;color:#085041;">AV</div>
-          <div>
-            <div class="appt-name">Anil Verma</div>
-            <div class="appt-sub">Neurology · Dr. Singh</div>
-          </div>
-          <div class="appt-time">11:00</div>
-        </div>
-        <div class="appt-item">
-          <div class="appt-avt" style="background:#FCEBEB;color:#791F1F;">PS</div>
-          <div>
-            <div class="appt-name">Pooja Singh</div>
-            <div class="appt-sub">Pediatrics · Dr. Riya</div>
-          </div>
-          <div class="appt-time">12:30</div>
-        </div>
+        {% endif %}
       </div>
     </div>
 

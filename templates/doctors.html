@@ -263,7 +263,7 @@
           <option value="orthopedic">Orthopedic</option>
           <option value="general">General</option>
         </select>
-        <a href="/doctors/add" class="add-btn">
+        <a href="/add_doctor" class="add-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -301,15 +301,15 @@
             </div>
           </div>
           <div class="doc-actions">
-            <a href="/doctors/view/{{ d[0] }}" class="btn-view">
+            <a href="/edit_doctor/{{ d[0] }}" class="btn-view">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               View
             </a>
-            <a href="/doctors/edit/{{ d[0] }}" class="btn-edit">
+            <a href="/edit_doctor/{{ d[0] }}" class="btn-edit">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               Edit
             </a>
-            <a href="/doctors/delete/{{ d[0] }}" class="btn-del">
+            <a href="/delete_doctor/{{ d[0] }}" class="btn-del">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
             </a>
           </div>
@@ -317,131 +317,6 @@
         {% endfor %}
       </div>
 
-    {% else %}
-      <!-- SAMPLE CARDS (jab doctors variable nahi hai Flask se) -->
-      <div class="doctors-grid">
-
-        <div class="doctor-card">
-          <div class="doc-avt" style="background:#EAF3DE;color:#27500A;">PM</div>
-          <div class="doc-name">Dr. Priya Mehta</div>
-          <div class="doc-spec">Cardiologist</div>
-          <div class="doc-meta">
-            <span class="doc-tag">Cardiology</span>
-            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
-          </div>
-          <hr class="doc-divider">
-          <div class="doc-stats">
-            <div><div class="doc-stat-val">128</div><div class="doc-stat-lbl">Patients</div></div>
-            <div><div class="doc-stat-val">12</div><div class="doc-stat-lbl">Years exp.</div></div>
-          </div>
-          <div class="doc-actions">
-            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
-            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
-          </div>
-        </div>
-
-        <div class="doctor-card">
-          <div class="doc-avt" style="background:#E1F5EE;color:#085041;">AK</div>
-          <div class="doc-name">Dr. Arjun Kumar</div>
-          <div class="doc-spec">Neuro Surgeon</div>
-          <div class="doc-meta">
-            <span class="doc-tag">Neurology</span>
-            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
-          </div>
-          <hr class="doc-divider">
-          <div class="doc-stats">
-            <div><div class="doc-stat-val">95</div><div class="doc-stat-lbl">Patients</div></div>
-            <div><div class="doc-stat-val">9</div><div class="doc-stat-lbl">Years exp.</div></div>
-          </div>
-          <div class="doc-actions">
-            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
-            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
-          </div>
-        </div>
-
-        <div class="doctor-card">
-          <div class="doc-avt" style="background:#FAEEDA;color:#633806;">SV</div>
-          <div class="doc-name">Dr. Sneha Verma</div>
-          <div class="doc-spec">Pediatrician</div>
-          <div class="doc-meta">
-            <span class="doc-tag">Pediatrics</span>
-            <span class="doc-tag"><span class="status-dot dot-gray"></span>On leave</span>
-          </div>
-          <hr class="doc-divider">
-          <div class="doc-stats">
-            <div><div class="doc-stat-val">74</div><div class="doc-stat-lbl">Patients</div></div>
-            <div><div class="doc-stat-val">7</div><div class="doc-stat-lbl">Years exp.</div></div>
-          </div>
-          <div class="doc-actions">
-            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
-            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
-          </div>
-        </div>
-
-        <div class="doctor-card">
-          <div class="doc-avt" style="background:#FCEBEB;color:#791F1F;">RS</div>
-          <div class="doc-name">Dr. Rahul Singh</div>
-          <div class="doc-spec">Orthopedic Surgeon</div>
-          <div class="doc-meta">
-            <span class="doc-tag">Orthopedic</span>
-            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
-          </div>
-          <hr class="doc-divider">
-          <div class="doc-stats">
-            <div><div class="doc-stat-val">110</div><div class="doc-stat-lbl">Patients</div></div>
-            <div><div class="doc-stat-val">15</div><div class="doc-stat-lbl">Years exp.</div></div>
-          </div>
-          <div class="doc-actions">
-            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
-            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
-          </div>
-        </div>
-
-        <div class="doctor-card">
-          <div class="doc-avt" style="background:#EEEDFE;color:#534AB7;">NA</div>
-          <div class="doc-name">Dr. Neha Agarwal</div>
-          <div class="doc-spec">General Physician</div>
-          <div class="doc-meta">
-            <span class="doc-tag">General</span>
-            <span class="doc-tag"><span class="status-dot dot-green"></span>Available</span>
-          </div>
-          <hr class="doc-divider">
-          <div class="doc-stats">
-            <div><div class="doc-stat-val">201</div><div class="doc-stat-lbl">Patients</div></div>
-            <div><div class="doc-stat-val">6</div><div class="doc-stat-lbl">Years exp.</div></div>
-          </div>
-          <div class="doc-actions">
-            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
-            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
-          </div>
-        </div>
-
-        <div class="doctor-card">
-          <div class="doc-avt" style="background:#E1F5EE;color:#085041;">MR</div>
-          <div class="doc-name">Dr. Mohit Rao</div>
-          <div class="doc-spec">Dermatologist</div>
-          <div class="doc-meta">
-            <span class="doc-tag">Dermatology</span>
-            <span class="doc-tag"><span class="status-dot dot-gray"></span>On leave</span>
-          </div>
-          <hr class="doc-divider">
-          <div class="doc-stats">
-            <div><div class="doc-stat-val">88</div><div class="doc-stat-lbl">Patients</div></div>
-            <div><div class="doc-stat-val">5</div><div class="doc-stat-lbl">Years exp.</div></div>
-          </div>
-          <div class="doc-actions">
-            <a href="#" class="btn-view"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-            <a href="#" class="btn-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</a>
-            <a href="#" class="btn-del"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></a>
-          </div>
-        </div>
-
-      </div>
     {% endif %}
 
     <!-- TABLE -->
@@ -475,60 +350,11 @@
               {% endif %}
             </td>
             <td>
-              <a href="/doctors/edit/{{ d[0] }}" class="edit-btn">Edit</a>
-              <a href="/doctors/delete/{{ d[0] }}" class="del-btn">Delete</a>
+            <a href="/edit_doctor/{{ d[0] }}" class="edit-btn">Edit</a>
+            <a href="/delete_doctor/{{ d[0] }}" class="del-btn">Delete</a>
             </td>
           </tr>
           {% endfor %}
-        {% else %}
-          <tr>
-            <td class="doc-id">#D001</td>
-            <td class="doc-name-cell">Dr. Priya Mehta</td>
-            <td>Cardiologist</td>
-            <td>Cardiology</td>
-            <td><span class="badge badge-green">Available</span></td>
-            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
-          </tr>
-          <tr>
-            <td class="doc-id">#D002</td>
-            <td class="doc-name-cell">Dr. Arjun Kumar</td>
-            <td>Neuro Surgeon</td>
-            <td>Neurology</td>
-            <td><span class="badge badge-green">Available</span></td>
-            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
-          </tr>
-          <tr>
-            <td class="doc-id">#D003</td>
-            <td class="doc-name-cell">Dr. Sneha Verma</td>
-            <td>Pediatrician</td>
-            <td>Pediatrics</td>
-            <td><span class="badge badge-gray">On leave</span></td>
-            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
-          </tr>
-          <tr>
-            <td class="doc-id">#D004</td>
-            <td class="doc-name-cell">Dr. Rahul Singh</td>
-            <td>Orthopedic Surgeon</td>
-            <td>Orthopedic</td>
-            <td><span class="badge badge-green">Available</span></td>
-            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
-          </tr>
-          <tr>
-            <td class="doc-id">#D005</td>
-            <td class="doc-name-cell">Dr. Neha Agarwal</td>
-            <td>General Physician</td>
-            <td>General</td>
-            <td><span class="badge badge-green">Available</span></td>
-            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
-          </tr>
-          <tr>
-            <td class="doc-id">#D006</td>
-            <td class="doc-name-cell">Dr. Mohit Rao</td>
-            <td>Dermatologist</td>
-            <td>Dermatology</td>
-            <td><span class="badge badge-gray">On leave</span></td>
-            <td><a href="#" class="edit-btn">Edit</a><a href="#" class="del-btn">Delete</a></td>
-          </tr>
         {% endif %}
       </table>
     </div>

@@ -349,115 +349,11 @@
       <!-- TODAY TIMELINE -->
       <div class="timeline-card">
         <div class="card-title">Today's timeline <a href="#">View all</a></div>
-
-        <div class="timeline-item">
-          <div class="tl-time">09:00</div>
-          <div class="tl-line">
-            <div class="tl-dot" style="background:#3B6D11"></div>
-            <div class="tl-bar"></div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-name">Ramesh Gupta</div>
-            <div class="tl-detail">Dr. Priya Mehta · Cardiology</div>
-            <span class="tl-tag" style="background:#EAF3DE;color:#27500A;">Completed</span>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="tl-time">10:15</div>
-          <div class="tl-line">
-            <div class="tl-dot" style="background:#3B6D11"></div>
-            <div class="tl-bar"></div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-name">Sunita Sharma</div>
-            <div class="tl-detail">Dr. Rahul Singh · Orthopedic</div>
-            <span class="tl-tag" style="background:#EAF3DE;color:#27500A;">Completed</span>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="tl-time">11:30</div>
-          <div class="tl-line">
-            <div class="tl-dot" style="background:#BA7517"></div>
-            <div class="tl-bar"></div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-name">Anil Verma</div>
-            <div class="tl-detail">Dr. Arjun Kumar · Neurology</div>
-            <span class="tl-tag" style="background:#FAEEDA;color:#633806;">In progress</span>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="tl-time">02:00</div>
-          <div class="tl-line">
-            <div class="tl-dot" style="background:#d4e8d4"></div>
-            <div class="tl-bar"></div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-name">Pooja Singh</div>
-            <div class="tl-detail">Dr. Sneha Verma · Pediatrics</div>
-            <span class="tl-tag" style="background:#F1EFE8;color:#5F5E5A;">Upcoming</span>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="tl-time">03:30</div>
-          <div class="tl-line">
-            <div class="tl-dot" style="background:#d4e8d4"></div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-name">Vikram Joshi</div>
-            <div class="tl-detail">Dr. Neha Agarwal · General</div>
-            <span class="tl-tag" style="background:#F1EFE8;color:#5F5E5A;">Upcoming</span>
-          </div>
-        </div>
       </div>
 
       <!-- UPCOMING MINI LIST -->
       <div class="timeline-card">
         <div class="card-title">Upcoming tomorrow <a href="#">See all</a></div>
-        <div class="mini-appt">
-          <div class="mini-avt" style="background:#EAF3DE;color:#27500A;">MK</div>
-          <div>
-            <div class="mini-name">Meena Kapoor</div>
-            <div class="mini-sub">Dermatology · Dr. Mohit Rao</div>
-          </div>
-          <div class="mini-time">09:00</div>
-        </div>
-        <div class="mini-appt">
-          <div class="mini-avt" style="background:#FAEEDA;color:#633806;">SP</div>
-          <div>
-            <div class="mini-name">Suresh Patel</div>
-            <div class="mini-sub">Cardiology · Dr. Priya Mehta</div>
-          </div>
-          <div class="mini-time">10:30</div>
-        </div>
-        <div class="mini-appt">
-          <div class="mini-avt" style="background:#E1F5EE;color:#085041;">RB</div>
-          <div>
-            <div class="mini-name">Renu Bose</div>
-            <div class="mini-sub">Gynecology · Dr. Anita Roy</div>
-          </div>
-          <div class="mini-time">11:00</div>
-        </div>
-        <div class="mini-appt">
-          <div class="mini-avt" style="background:#EEEDFE;color:#534AB7;">KS</div>
-          <div>
-            <div class="mini-name">Karan Shah</div>
-            <div class="mini-sub">Orthopedic · Dr. Rahul Singh</div>
-          </div>
-          <div class="mini-time">02:00</div>
-        </div>
-        <div class="mini-appt">
-          <div class="mini-avt" style="background:#FCEBEB;color:#791F1F;">NJ</div>
-          <div>
-            <div class="mini-name">Nita Jain</div>
-            <div class="mini-sub">General · Dr. Neha Agarwal</div>
-          </div>
-          <div class="mini-time">04:00</div>
-        </div>
       </div>
     </div>
 
@@ -483,11 +379,8 @@
         </select>
         <select class="filter-select">
           <option value="">All doctors</option>
-          <option>Dr. Priya Mehta</option>
-          <option>Dr. Arjun Kumar</option>
-          <option>Dr. Rahul Singh</option>
         </select>
-        <a href="/appointments/add" class="add-btn">
+        <a href="/add_appointment" class="add-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -555,91 +448,13 @@
             </td>
             <td>
               <div class="action-wrap">
-                <a href="/appointments/confirm/{{ a[0] }}" class="btn-sm btn-confirm">Confirm</a>
-                <a href="/appointments/edit/{{ a[0] }}" class="btn-sm btn-reschedule">Reschedule</a>
-                <a href="/appointments/cancel/{{ a[0] }}" class="btn-sm btn-cancel">Cancel</a>
+                <a href="/edit_appointment/{{ a[0] }}" class="btn-sm btn-reschedule">Reschedule</a>
+                <a href="/delete_appointment/{{ a[0] }}" class="btn-sm btn-cancel">Cancel</a>
               </div>
             </td>
           </tr>
           {% endfor %}
 
-        {% else %}
-          <!-- SAMPLE DATA -->
-          <tr>
-            <td style="font-size:11px;color:#639922;">#A001</td>
-            <td>
-              <div class="patient-cell">
-                <div class="p-avt" style="background:#EAF3DE;color:#27500A;">RG</div>
-                <div><div class="p-name">Ramesh Gupta</div><div class="p-id">#P001</div></div>
-              </div>
-            </td>
-            <td><div class="doc-cell"><div class="d-avt">PM</div><span style="font-size:13px;">Dr. Priya Mehta</span></div></td>
-            <td>Cardiology</td>
-            <td><div class="time-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>15 Apr · 09:00</div></td>
-            <td><span class="badge badge-blue">OPD</span></td>
-            <td><span class="badge badge-green">Confirmed</span></td>
-            <td><div class="action-wrap"><a href="#" class="btn-sm btn-confirm">Confirm</a><a href="#" class="btn-sm btn-reschedule">Reschedule</a><a href="#" class="btn-sm btn-cancel">Cancel</a></div></td>
-          </tr>
-          <tr>
-            <td style="font-size:11px;color:#639922;">#A002</td>
-            <td>
-              <div class="patient-cell">
-                <div class="p-avt" style="background:#FAEEDA;color:#633806;">SS</div>
-                <div><div class="p-name">Sunita Sharma</div><div class="p-id">#P002</div></div>
-              </div>
-            </td>
-            <td><div class="doc-cell"><div class="d-avt">RS</div><span style="font-size:13px;">Dr. Rahul Singh</span></div></td>
-            <td>Orthopedic</td>
-            <td><div class="time-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>15 Apr · 10:15</div></td>
-            <td><span class="badge badge-blue">OPD</span></td>
-            <td><span class="badge badge-gray">Completed</span></td>
-            <td><div class="action-wrap"><a href="#" class="btn-sm btn-confirm">Confirm</a><a href="#" class="btn-sm btn-reschedule">Reschedule</a><a href="#" class="btn-sm btn-cancel">Cancel</a></div></td>
-          </tr>
-          <tr>
-            <td style="font-size:11px;color:#639922;">#A003</td>
-            <td>
-              <div class="patient-cell">
-                <div class="p-avt" style="background:#E1F5EE;color:#085041;">AV</div>
-                <div><div class="p-name">Anil Verma</div><div class="p-id">#P003</div></div>
-              </div>
-            </td>
-            <td><div class="doc-cell"><div class="d-avt">AK</div><span style="font-size:13px;">Dr. Arjun Kumar</span></div></td>
-            <td>Neurology</td>
-            <td><div class="time-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>15 Apr · 11:30</div></td>
-            <td><span class="badge badge-blue">Emergency</span></td>
-            <td><span class="badge badge-amber">Pending</span></td>
-            <td><div class="action-wrap"><a href="#" class="btn-sm btn-confirm">Confirm</a><a href="#" class="btn-sm btn-reschedule">Reschedule</a><a href="#" class="btn-sm btn-cancel">Cancel</a></div></td>
-          </tr>
-          <tr>
-            <td style="font-size:11px;color:#639922;">#A004</td>
-            <td>
-              <div class="patient-cell">
-                <div class="p-avt" style="background:#FCEBEB;color:#791F1F;">PS</div>
-                <div><div class="p-name">Pooja Singh</div><div class="p-id">#P004</div></div>
-              </div>
-            </td>
-            <td><div class="doc-cell"><div class="d-avt">SV</div><span style="font-size:13px;">Dr. Sneha Verma</span></div></td>
-            <td>Pediatrics</td>
-            <td><div class="time-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>15 Apr · 02:00</div></td>
-            <td><span class="badge badge-blue">Follow-up</span></td>
-            <td><span class="badge badge-green">Confirmed</span></td>
-            <td><div class="action-wrap"><a href="#" class="btn-sm btn-confirm">Confirm</a><a href="#" class="btn-sm btn-reschedule">Reschedule</a><a href="#" class="btn-sm btn-cancel">Cancel</a></div></td>
-          </tr>
-          <tr>
-            <td style="font-size:11px;color:#639922;">#A005</td>
-            <td>
-              <div class="patient-cell">
-                <div class="p-avt" style="background:#EEEDFE;color:#534AB7;">VJ</div>
-                <div><div class="p-name">Vikram Joshi</div><div class="p-id">#P005</div></div>
-              </div>
-            </td>
-            <td><div class="doc-cell"><div class="d-avt">NA</div><span style="font-size:13px;">Dr. Neha Agarwal</span></div></td>
-            <td>General</td>
-            <td><div class="time-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>15 Apr · 03:30</div></td>
-            <td><span class="badge badge-blue">OPD</span></td>
-            <td><span class="badge badge-red">Cancelled</span></td>
-            <td><div class="action-wrap"><a href="#" class="btn-sm btn-confirm">Confirm</a><a href="#" class="btn-sm btn-reschedule">Reschedule</a><a href="#" class="btn-sm btn-cancel">Cancel</a></div></td>
-          </tr>
         {% endif %}
       </table>
     </div>

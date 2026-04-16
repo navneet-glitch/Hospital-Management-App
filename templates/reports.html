@@ -182,7 +182,7 @@
           </div>
           <span class="stat-badge-pill" style="background:#EAF3DE;color:#27500A;">Total</span>
         </div>
-        <div class="stat-value">48</div>
+        <div class="stat-value">{{ total_reports if total_reports is defined else 0 }}</div>
         <div class="stat-label">Total reports</div>
       </div>
 
@@ -195,7 +195,7 @@
           </div>
           <span class="stat-badge-pill" style="background:#E1F5EE;color:#085041;">Completed</span>
         </div>
-        <div class="stat-value">42</div>
+        <div class="stat-value">{{ completed_reports if completed_reports is defined else 0 }}</div>
         <div class="stat-label">Completed</div>
       </div>
 
@@ -209,7 +209,7 @@
           </div>
           <span class="stat-badge-pill" style="background:#FAEEDA;color:#633806;">Pending</span>
         </div>
-        <div class="stat-value">6</div>
+        <div class="stat-value">{{ pending_reports if pending_reports is defined else 0 }}</div>
         <div class="stat-label">Pending</div>
       </div>
 
@@ -271,108 +271,42 @@
         <tr>
           <th>Report ID</th>
           <th>Patient</th>
-          <th>Department</th>
+          <th>Doctor</th>
           <th>Type</th>
           <th>Date</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
-        <tr>
-          <td><strong>#R001</strong></td>
-          <td>Ramesh Gupta</td>
-          <td>Cardiology</td>
-          <td>Lab Report</td>
-          <td>2026-04-15</td>
-          <td><span class="badge badge-green">Completed</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R002</strong></td>
-          <td>Sunita Sharma</td>
-          <td>Orthopedic</td>
-          <td>X-Ray Report</td>
-          <td>2026-04-14</td>
-          <td><span class="badge badge-green">Completed</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R003</strong></td>
-          <td>Anil Verma</td>
-          <td>Neurology</td>
-          <td>MRI Report</td>
-          <td>2026-04-13</td>
-          <td><span class="badge badge-green">Completed</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R004</strong></td>
-          <td>Pooja Singh</td>
-          <td>Pediatrics</td>
-          <td>Growth Chart</td>
-          <td>2026-04-12</td>
-          <td><span class="badge badge-amber">Pending</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R005</strong></td>
-          <td>Vikram Joshi</td>
-          <td>Cardiology</td>
-          <td>ECG Report</td>
-          <td>2026-04-11</td>
-          <td><span class="badge badge-green">Completed</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R006</strong></td>
-          <td>Meena Patel</td>
-          <td>General</td>
-          <td>Blood Test</td>
-          <td>2026-04-10</td>
-          <td><span class="badge badge-amber">Pending</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R007</strong></td>
-          <td>Rajesh Kumar</td>
-          <td>Orthopedic</td>
-          <td>CT Scan</td>
-          <td>2026-04-09</td>
-          <td><span class="badge badge-blue">Archived</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>#R008</strong></td>
-          <td>Priya Desai</td>
-          <td>Neurology</td>
-          <td>EEG Report</td>
-          <td>2026-04-08</td>
-          <td><span class="badge badge-green">Completed</span></td>
-          <td>
-            <button class="action-btn">View</button>
-            <button class="download-btn">Download</button>
-          </td>
-        </tr>
+        {% if reports %}
+          {% for r in reports %}
+          <tr>
+            <td><strong>#R{{ '%03d' % r[0] }}</strong></td>
+            <td>{{ r[1] }}</td>
+            <td>{{ r[2] }}</td>
+            <td>{{ r[3] }}</td>
+            <td>{{ r[4] }}</td>
+            <td>
+              {% if r[5] == 'Completed' %}
+                <span class="badge badge-green">Completed</span>
+              {% elif r[5] == 'Pending' %}
+                <span class="badge badge-amber">Pending</span>
+              {% elif r[5] == 'Processing' %}
+                <span class="badge badge-blue">Processing</span>
+              {% else %}
+                <span class="badge badge-green">{{ r[5] }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <button class="action-btn">View</button>
+              <button class="download-btn">Download</button>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px; color: #639922;">No reports found</td>
+          </tr>
+        {% endif %}
       </table>
     </div>
 
