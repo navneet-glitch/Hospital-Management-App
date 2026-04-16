@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports 📊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; display: flex; background: #f7fbf7; min-height: 100vh; }
+
+    .sidebar { width: 220px; background: #fff; border-right: 0.5px solid #d4e8d4; padding: 20px 14px; position: fixed; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; padding: 4px 8px 22px; }
+    .logo-icon { width: 34px; height: 34px; background: #EAF3DE; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 15px; font-weight: 500; color: #27500A; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 10px; font-size: 13px; color: #5F5E5A; cursor: pointer; text-decoration: none; }
+    .nav-item:hover { background: #f0faf5; color: #27500A; }
+    .nav-item.active { background: #EAF3DE; color: #27500A; font-weight: 500; }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 0.5px solid #d4e8d4; }
+    .user-card { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 10px; }
+    .user-avt { width: 32px; height: 32px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+    .user-name { font-size: 12px; font-weight: 500; color: #173404; }
+    .user-role { font-size: 11px; color: #639922; }
+
+    .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+
+    .topbar { background: #fff; border-bottom: 0.5px solid #d4e8d4; padding: 13px 26px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-size: 15px; font-weight: 500; color: #173404; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .search-wrap { display: flex; align-items: center; gap: 8px; background: #f7fbf7; border: 0.5px solid #c8e8c8; border-radius: 9px; padding: 7px 13px; }
+    .search-wrap input { border: none; outline: none; background: transparent; font-family: 'Poppins', sans-serif; font-size: 13px; color: #27500A; width: 180px; }
+    .search-wrap input::placeholder { color: #8ab48a; }
+    .notif-btn { width: 34px; height: 34px; border-radius: 50%; background: #f7fbf7; border: 0.5px solid #c8e8c8; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+    .notif-dot { width: 7px; height: 7px; background: #E24B4A; border-radius: 50%; position: absolute; top: 6px; right: 6px; }
+    .top-avatar { width: 34px; height: 34px; border-radius: 50%; background: #EAF3DE; color: #27500A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; }
+
+    .content { padding: 22px 26px; }
+
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .section-title { font-size: 14px; font-weight: 500; color: #173404; }
+    .add-btn { background: #3B6D11; color: white; border: none; border-radius: 9px; padding: 8px 16px; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .add-btn:hover { background: #27500A; }
+
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-input { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 9px; padding: 8px 12px; font-family: 'Poppins', sans-serif; font-size: 13px; color: #27500A; }
+    .filter-input::placeholder { color: #8ab48a; }
+    .filter-btn { background: #EAF3DE; color: #27500A; border: 0.5px solid #d4e8d4; border-radius: 9px; padding: 8px 12px; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer; }
+    .filter-btn:hover { background: #C0DD97; }
+
+    .table-wrap { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #EAF3DE; color: #27500A; font-size: 12px; font-weight: 500; padding: 11px 16px; text-align: left; }
+    td { padding: 11px 16px; font-size: 13px; color: #2C2C2A; border-bottom: 0.5px solid #eef5ee; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f7fbf7; }
+
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; display: inline-block; }
+    .badge-green  { background: #EAF3DE; color: #27500A; }
+    .badge-amber  { background: #FAEEDA; color: #633806; }
+    .badge-red    { background: #FCEBEB; color: #791F1F; }
+    .badge-blue   { background: #E6F1FB; color: #0C447C; }
+
+    .action-btn { background: #EAF3DE; color: #27500A; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; text-decoration: none; margin-right: 5px; }
+    .action-btn:hover { background: #C0DD97; }
+    .download-btn { background: #3B6D11; color: white; border: none; border-radius: 7px; padding: 5px 12px; font-size: 12px; font-family: 'Poppins', sans-serif; cursor: pointer; }
+    .download-btn:hover { background: #27500A; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-bottom: 22px; }
+    .stat-card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 12px; padding: 15px 16px; }
+    .stat-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .stat-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .stat-badge-pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .stat-value { font-size: 24px; font-weight: 500; color: #173404; margin: 10px 0 2px; }
+    .stat-label { font-size: 12px; color: #639922; }
+
+    .report-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 0.5px solid #d4e8d4; }
+    .tab { padding: 10px 16px; font-size: 13px; color: #5F5E5A; cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: #27500A; border-bottom-color: #3B6D11; font-weight: 500; }
+    .tab:hover { color: #27500A; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+        <path d="M22 16.5a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7.5A4 4 0 0 1 6 3.5h12a4 4 0 0 1 4 4v9z"/>
+        <path d="M12 8v8M8 12h8"/>
+      </svg>
+    </div>
+    <span class="logo-text">MediCare</span>
+  </div>
+
+  <a href="/" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="#27500A"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Dashboard
+  </a>
+  <a href="/patients" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    Patients
+  </a>
+  <a href="/doctors" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
+      <path d="M3 22c0-5 4-8 9-8s9 3 9 8"/>
+    </svg>
+    Doctors
+  </a>
+  <a href="/appointments" class="nav-item">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="4" width="18" height="17" rx="2"/>
+      <path d="M8 2v4M16 2v4M3 10h18"/>
+    </svg>
+    Appointments
+  </a>
+  <a href="/reports" class="nav-item active">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/>
+      <line x1="8" y1="17" x2="16" y2="17"/>
+    </svg>
+    Reports
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avt">DR</div>
+      <div>
+        <div class="user-name">Dr. Admin</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">Reports</div>
+    <div class="topbar-right">
+      <form action="/search" method="GET" style="margin:0">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8ab48a" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" name="q" placeholder="Search reports...">
+        </div>
+      </form>
+      <div class="notif-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="top-avatar">DR</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STATS CARDS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#EAF3DE">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2">
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#EAF3DE;color:#27500A;">Total</span>
+        </div>
+        <div class="stat-value">48</div>
+        <div class="stat-label">Total reports</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#E1F5EE">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#E1F5EE;color:#085041;">Completed</span>
+        </div>
+        <div class="stat-value">42</div>
+        <div class="stat-label">Completed</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#FAEEDA">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#FAEEDA;color:#633806;">Pending</span>
+        </div>
+        <div class="stat-value">6</div>
+        <div class="stat-label">Pending</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon" style="background:#FCEBEB">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+          </div>
+          <span class="stat-badge-pill" style="background:#FCEBEB;color:#791F1F;">Alert</span>
+        </div>
+        <div class="stat-value">0</div>
+        <div class="stat-label">Issues</div>
+      </div>
+    </div>
+
+    <!-- REPORT TABS -->
+    <div class="report-tabs">
+      <div class="tab active">All Reports</div>
+      <div class="tab">Patient Reports</div>
+      <div class="tab">Department Reports</div>
+      <div class="tab">Clinical Reports</div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <input type="text" class="filter-input" placeholder="Search by patient or ID...">
+      <select class="filter-input" style="width: 150px;">
+        <option>All Departments</option>
+        <option>Cardiology</option>
+        <option>Neurology</option>
+        <option>Orthopedic</option>
+        <option>Pediatrics</option>
+      </select>
+      <select class="filter-input" style="width: 120px;">
+        <option>All Status</option>
+        <option>Completed</option>
+        <option>Pending</option>
+        <option>Processing</option>
+      </select>
+      <button class="filter-btn">🔍 Filter</button>
+    </div>
+
+    <!-- REPORTS TABLE -->
+    <div class="section-header">
+      <div class="section-title">Generated Reports</div>
+      <button class="add-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Generate Report
+      </button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Report ID</th>
+          <th>Patient</th>
+          <th>Department</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        <tr>
+          <td><strong>#R001</strong></td>
+          <td>Ramesh Gupta</td>
+          <td>Cardiology</td>
+          <td>Lab Report</td>
+          <td>2026-04-15</td>
+          <td><span class="badge badge-green">Completed</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R002</strong></td>
+          <td>Sunita Sharma</td>
+          <td>Orthopedic</td>
+          <td>X-Ray Report</td>
+          <td>2026-04-14</td>
+          <td><span class="badge badge-green">Completed</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R003</strong></td>
+          <td>Anil Verma</td>
+          <td>Neurology</td>
+          <td>MRI Report</td>
+          <td>2026-04-13</td>
+          <td><span class="badge badge-green">Completed</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R004</strong></td>
+          <td>Pooja Singh</td>
+          <td>Pediatrics</td>
+          <td>Growth Chart</td>
+          <td>2026-04-12</td>
+          <td><span class="badge badge-amber">Pending</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R005</strong></td>
+          <td>Vikram Joshi</td>
+          <td>Cardiology</td>
+          <td>ECG Report</td>
+          <td>2026-04-11</td>
+          <td><span class="badge badge-green">Completed</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R006</strong></td>
+          <td>Meena Patel</td>
+          <td>General</td>
+          <td>Blood Test</td>
+          <td>2026-04-10</td>
+          <td><span class="badge badge-amber">Pending</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R007</strong></td>
+          <td>Rajesh Kumar</td>
+          <td>Orthopedic</td>
+          <td>CT Scan</td>
+          <td>2026-04-09</td>
+          <td><span class="badge badge-blue">Archived</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>#R008</strong></td>
+          <td>Priya Desai</td>
+          <td>Neurology</td>
+          <td>EEG Report</td>
+          <td>2026-04-08</td>
+          <td><span class="badge badge-green">Completed</span></td>
+          <td>
+            <button class="action-btn">View</button>
+            <button class="download-btn">Download</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
