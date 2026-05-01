@@ -115,6 +115,30 @@ def logout():
     session.pop('user', None)
     return redirect('/login')
 
+@app.route('/patients')
+@login_required
+def get_patients():
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM patients")
+    data = cursor.fetchall()
+    # If there are patients, show the first one's detail view
+    if data:
+        return render_template('patients.html', p=data[0])
+    else:
+        return render_template('patients.html', p=None)
+
+
+@app.route('/patients/<int:id>')
+@login_required
+def view_patient(id):
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM patients WHERE id=%s", (id,))
+    patient = cursor.fetchone()
+    if patient:
+        return render_template('patients.html', p=patient)
+    else:
+        return redirect('/patients')
+
 
 # ===========================
 # ADD PATIENT
