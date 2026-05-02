@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Doctor 🏥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: #f7fbf7; min-height: 100vh; padding: 40px 20px; }
+
+    .container { max-width: 600px; margin: 0 auto; }
+
+    .form-card { background: #fff; border: 0.5px solid #d4e8d4; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+    .form-header { text-align: center; margin-bottom: 32px; }
+    .form-header h2 { font-size: 24px; font-weight: 500; color: #173404; margin-bottom: 8px; }
+    .form-header p { font-size: 13px; color: #639922; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 500; color: #3B6D11; margin-bottom: 8px; }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 0.5px solid #c8e8c8;
+      border-radius: 9px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      color: #173404;
+      background: #f7fbf7;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus { border-color: #3B6D11; background: #fff; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .button-group { display: flex; gap: 12px; margin-top: 28px; }
+    .btn { flex: 1; padding: 12px 20px; border: none; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: #3B6D11; color: white; }
+    .btn-primary:hover { background: #27500A; }
+    .btn-secondary { background: #EAF3DE; color: #27500A; border: 0.5px solid #d4e8d4; }
+    .btn-secondary:hover { background: #d4e8d4; }
+
+    a { color: #3B6D11; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="form-card">
+    <div class="form-header">
+      <h2>👨‍⚕️ Add Doctor</h2>
+      <p>Register a new doctor to the system</p>
+    </div>
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="name">Doctor's Full Name *</label>
+        <input type="text" name="name" id="name" placeholder="Dr. Ahmad Hassan" required>
+      </div>
+
+      <div class="form-group">
+        <label for="specialization">Specialization *</label>
+        <input type="text" name="specialization" id="specialization" placeholder="e.g., Cardiology" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Contact Phone *</label>
+        <input type="tel" name="phone" id="phone" placeholder="0300-1234567" required>
+      </div>
+
+      <div class="button-group">
+        <a href="/doctors" class="btn btn-secondary">← Back</a>
+        <button type="submit" class="btn btn-primary">Add Doctor →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

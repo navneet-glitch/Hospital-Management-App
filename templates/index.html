@@ -247,31 +247,14 @@
       <!-- Department Load -->
       <div class="card">
         <div class="card-title">Department load <a href="#">This week</a></div>
+        {% set colors = ['#3B6D11', '#639922', '#97C459', '#C0DD97', '#3B6D11'] %}
+        {% for dept in ['Cardiology', 'Neurology', 'Pediatrics', 'Orthopedic', 'General'] %}
         <div class="bar-row">
-          <div class="bar-label">Cardiology</div>
-          <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
-          <div class="bar-val">78%</div>
+          <div class="bar-label">{{ dept }}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:{{ dept_load[dept] if dept_load[dept] is defined else 0 }}%;background:{{ colors[loop.index0] }}"></div></div>
+          <div class="bar-val">{{ dept_load[dept] if dept_load[dept] is defined else 0 }}%</div>
         </div>
-        <div class="bar-row">
-          <div class="bar-label">Neurology</div>
-          <div class="bar-track"><div class="bar-fill" style="width:55%;background:#639922"></div></div>
-          <div class="bar-val">55%</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Pediatrics</div>
-          <div class="bar-track"><div class="bar-fill" style="width:90%;background:#97C459"></div></div>
-          <div class="bar-val">90%</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Orthopedic</div>
-          <div class="bar-track"><div class="bar-fill" style="width:42%;background:#C0DD97"></div></div>
-          <div class="bar-val">42%</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">General</div>
-          <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
-          <div class="bar-val">65%</div>
-        </div>
+        {% endfor %}
       </div>
 
       <!-- Appointments -->
@@ -285,7 +268,7 @@
               <div class="appt-name">{{ a[1] }}</div>
               <div class="appt-sub">{{ a[5] }} · Dr. {{ a[2].split()[-1] }}</div>
             </div>
-            <div class="appt-time">{{ a[4] }}</div>
+            <div class="appt-time">{{ a[3].strftime('%d %b') if a[3] else 'N/A' }} · {{ a[4] }}</div>
           </div>
           {% endfor %}
         {% else %}

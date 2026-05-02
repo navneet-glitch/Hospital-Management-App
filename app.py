@@ -44,22 +44,53 @@ def index():
     cursor.execute("SELECT COUNT(*) FROM patients WHERE status='Critical'")
     critical_count = cursor.fetchone()[0]
     
-    # Get today's appointments
+    # Get today's appointments (with real dates and times)
     cursor.execute("""
         SELECT a.id, p.name, d.name, a.date, a.time, a.department
         FROM appointments a
         JOIN patients p ON a.patient_id = p.id
         JOIN doctors d ON a.doctor_id = d.id
+        ORDER BY a.date DESC, a.time DESC
         LIMIT 4
     """)
     today_appointments = cursor.fetchall()
+    
+    # Get department load (count of appointments per department this week)
+    cursor.execute("""
+        SELECT COALESCE(a.department, 'General') as dept, COUNT(*) as count
+        FROM appointments a
+        WHERE a.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        GROUP BY COALESCE(a.department, 'General')
+        ORDER BY dept
+    """)
+    dept_counts = cursor.fetchall()
+    
+    # Calculate total appointments for percentage calculation
+    cursor.execute("""
+        SELECT COUNT(*) FROM appointments a
+        WHERE a.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    """)
+    total_dept = cursor.fetchone()[0]
+    
+    # Convert to dictionary with percentages
+    dept_load = {}
+    if total_dept > 0:
+        for dept, count in dept_counts:
+            dept_load[dept] = round((count / total_dept) * 100)
+    
+    # Ensure all departments are present
+    all_depts = ['Cardiology', 'Neurology', 'Pediatrics', 'Orthopedic', 'General']
+    for dept in all_depts:
+        if dept not in dept_load:
+            dept_load[dept] = 0
     
     return render_template('index.html', 
                          patients=patients,
                          today_appointments=today_appointments,
                          admitted_count=admitted_count,
                          opd_count=opd_count,
-                         critical_count=critical_count)
+                         critical_count=critical_count,
+                         dept_load=dept_load)
 
 
 # ===========================
