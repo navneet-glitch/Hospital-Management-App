@@ -252,7 +252,25 @@ def doctors():
     cursor = db.cursor()
     cursor.execute("SELECT * FROM doctors")
     data = cursor.fetchall()
-    return render_template('doctors.html', doctors=data)
+    
+    # Get statistics
+    cursor.execute("SELECT COUNT(*) FROM doctors WHERE status='Available'")
+    on_duty = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM doctors WHERE status='On leave'")
+    on_leave = cursor.fetchone()[0]
+    
+    cursor.execute("""
+        SELECT COUNT(DISTINCT doctor_id) FROM appointments
+        WHERE date = CURDATE()
+    """)
+    appointments_today = cursor.fetchone()[0]
+    
+    return render_template('doctors.html', 
+                         doctors=data,
+                         on_duty=on_duty,
+                         on_leave=on_leave,
+                         appointments_today=appointments_today)
 
 @app.route('/edit_doctor/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -316,8 +334,8 @@ def appointments():
 
     data = cursor.fetchall()
     
-    # Get statistics
-    cursor.execute("SELECT COUNT(*) FROM appointments")
+    # Get statistics - Today's appointments
+    cursor.execute("SELECT COUNT(*) FROM appointments WHERE date = CURDATE()")
     today_count = cursor.fetchone()[0]
     
     cursor.execute("SELECT COUNT(*) FROM appointments WHERE status='Completed'")
@@ -430,11 +448,45 @@ def reports():
     cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
     pending_reports = cursor.fetchone()[0]
     
+    # Get patients and doctors for modal
+    cursor.execute("SELECT id, name FROM patients ORDER BY name")
+    patients = cursor.fetchall()
+    
+    cursor.execute("SELECT id, name FROM doctors ORDER BY name")
+    doctors = cursor.fetchall()
+    
     return render_template('reports.html', 
                          reports=reports_data,
                          total_reports=total_reports,
                          completed_reports=completed_reports,
-                         pending_reports=pending_reports)
+                         pending_reports=pending_reports,
+                         patients=patients,
+                         doctors=doctors)
+
+
+# ===========================
+# GENERATE REPORT
+# ===========================
+@app.route('/generate-report', methods=['POST'])
+@login_required
+def generate_report():
+    try:
+        patient_id = request.form['patient_id']
+        doctor_id = request.form['doctor_id']
+        report_type = request.form['report_type']
+        notes = request.form.get('notes', '')
+        
+        cursor = db.cursor()
+        cursor.execute("""
+            INSERT INTO reports (patient_id, doctor_id, report_type, notes, status, date)
+            VALUES (%s, %s, %s, %s, 'Pending', CURDATE())
+        """, (patient_id, doctor_id, report_type, notes))
+        db.commit()
+        
+        return redirect('/reports')
+    except Exception as e:
+        print(f"Error generating report: {e}")
+        return "Error generating report", 500
 
 
 # ===========================

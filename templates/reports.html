@@ -257,7 +257,7 @@
     <!-- REPORTS TABLE -->
     <div class="section-header">
       <div class="section-title">Generated Reports</div>
-      <button class="add-btn">
+      <button class="add-btn" onclick="openReportModal()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
@@ -312,6 +312,74 @@
 
   </div>
 </div>
+
+<!-- GENERATE REPORT MODAL -->
+<div id="reportModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background:white; padding:30px; border-radius:12px; width:400px; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+    <h2 style="color:#27500A; margin-bottom:20px; font-size:18px;">Generate New Report</h2>
+    <form action="/generate-report" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+      
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Select Patient *</label>
+        <select name="patient_id" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;">
+          <option value="">-- Choose Patient --</option>
+          {% for p in patients %}
+            <option value="{{ p[0] }}">{{ p[1] }} (ID: {{ p[0] }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Select Doctor *</label>
+        <select name="doctor_id" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;">
+          <option value="">-- Choose Doctor --</option>
+          {% for d in doctors %}
+            <option value="{{ d[0] }}">{{ d[1] }} (ID: {{ d[0] }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Report Type *</label>
+        <select name="report_type" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;">
+          <option value="">-- Choose Type --</option>
+          <option value="Clinical">Clinical</option>
+          <option value="Lab">Lab</option>
+          <option value="Pathology">Pathology</option>
+          <option value="Radiology">Radiology</option>
+          <option value="Pharmacy">Pharmacy</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Notes</label>
+        <textarea name="notes" style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; min-height:80px; resize:vertical;"></textarea>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="button" onclick="closeReportModal()" style="flex:1; padding:10px; background:#EAF3DE; color:#27500A; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer;">Cancel</button>
+        <button type="submit" style="flex:1; padding:10px; background:#3B6D11; color:white; border:none; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer; font-weight:500;">Generate</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openReportModal() {
+  document.getElementById('reportModal').style.display = 'flex';
+}
+
+function closeReportModal() {
+  document.getElementById('reportModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+document.getElementById('reportModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeReportModal();
+  }
+});
+</script>
 
 </body>
 </html>
