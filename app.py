@@ -421,6 +421,82 @@ def delete_appointment(id):
 
 
 # ===========================
+# MEDICAL HISTORY
+# ===========================
+@app.route('/add-medical-history', methods=['POST'])
+@login_required
+def add_medical_history():
+    try:
+        patient_id = request.form['patient_id']
+        diagnosis = request.form['diagnosis']
+        date = request.form.get('date', '')
+        details = request.form.get('details', '')
+        
+        cursor = db.cursor()
+        cursor.execute("""
+            INSERT INTO medical_history (patient_id, diagnosis, date, details)
+            VALUES (%s, %s, %s, %s)
+        """, (patient_id, diagnosis, date, details))
+        db.commit()
+        
+        return redirect(f'/patients/{patient_id}')
+    except Exception as e:
+        print(f"Error adding medical history: {e}")
+        return f"Error adding medical history: {e}", 500
+
+
+# ===========================
+# PRESCRIPTIONS
+# ===========================
+@app.route('/add-prescription', methods=['POST'])
+@login_required
+def add_prescription():
+    try:
+        patient_id = request.form['patient_id']
+        medicine_name = request.form['medicine_name']
+        dosage = request.form['dosage']
+        frequency = request.form['frequency']
+        duration = request.form.get('duration', '')
+        
+        cursor = db.cursor()
+        cursor.execute("""
+            INSERT INTO prescriptions (patient_id, medicine_name, dosage, frequency, duration, date)
+            VALUES (%s, %s, %s, %s, %s, CURDATE())
+        """, (patient_id, medicine_name, dosage, frequency, duration))
+        db.commit()
+        
+        return redirect(f'/patients/{patient_id}')
+    except Exception as e:
+        print(f"Error adding prescription: {e}")
+        return f"Error adding prescription: {e}", 500
+
+
+# ===========================
+# NOTES
+# ===========================
+@app.route('/add-note', methods=['POST'])
+@login_required
+def add_note():
+    try:
+        patient_id = request.form['patient_id']
+        note_title = request.form['note_title']
+        note_content = request.form['note_content']
+        priority = request.form.get('priority', 'Normal')
+        
+        cursor = db.cursor()
+        cursor.execute("""
+            INSERT INTO doctor_notes (patient_id, title, content, priority, date)
+            VALUES (%s, %s, %s, %s, CURDATE())
+        """, (patient_id, note_title, note_content, priority))
+        db.commit()
+        
+        return redirect(f'/patients/{patient_id}')
+    except Exception as e:
+        print(f"Error adding note: {e}")
+        return f"Error adding note: {e}", 500
+
+
+# ===========================
 # REPORTS
 # ===========================
 @app.route('/reports')

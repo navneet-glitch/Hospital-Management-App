@@ -306,7 +306,6 @@
         <button class="tab active" onclick="showTab('overview', this)">Overview</button>
         <button class="tab" onclick="showTab('history', this)">Medical History</button>
         <button class="tab" onclick="showTab('prescriptions', this)">Prescriptions</button>
-        <button class="tab" onclick="showTab('appointments', this)">Appointments</button>
         <button class="tab" onclick="showTab('notes', this)">Notes</button>
       </div>
 
@@ -358,10 +357,10 @@
         <div class="card">
           <div class="card-title">
             Medical history timeline
-            <a href="#" class="add-btn">
+            <button onclick="openMedicalHistoryModal()" class="add-btn">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Add record
-            </a>
+            </button>
           </div>
           <div style="padding: 20px; text-align: center; color: #639922; font-size: 12px;">
             No medical history records
@@ -374,29 +373,13 @@
         <div class="card">
           <div class="card-title">
             Current prescriptions
-            <a href="#" class="add-btn">
+            <button onclick="openPrescriptionModal()" class="add-btn">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Add medicine
-            </a>
+            </button>
           </div>
           <div style="padding: 20px; text-align: center; color: #639922; font-size: 12px;">
             No prescriptions available
-          </div>
-        </div>
-      </div>
-
-      <!-- ─ APPOINTMENTS TAB ─ -->
-      <div id="tab-appointments" style="display:none;">
-        <div class="card">
-          <div class="card-title">
-            Appointment history
-            <a href="/appointments/add" class="add-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Book appointment
-            </a>
-          </div>
-          <div style="padding: 20px; text-align: center; color: #639922; font-size: 12px;">
-            No appointments available
           </div>
         </div>
       </div>
@@ -406,10 +389,10 @@
         <div class="card">
           <div class="card-title">
             Doctor notes
-            <a href="#" class="add-btn">
+            <button onclick="openNotesModal()" class="add-btn">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Add note
-            </a>
+            </button>
           </div>
           <div style="padding: 20px; text-align: center; color: #639922; font-size: 12px;">
             No doctor notes available
@@ -421,10 +404,117 @@
   </div>
 </div>
 
+<!-- MODALS -->
+<!-- Medical History Modal -->
+<div id="medicalHistoryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background:white; padding:30px; border-radius:12px; width:450px; box-shadow:0 10px 40px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto;">
+    <h2 style="color:#27500A; margin-bottom:20px; font-size:18px;">Add Medical History Record</h2>
+    <form action="/add-medical-history" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+      <input type="hidden" name="patient_id" value="{{ p[0] if p else '' }}">
+      
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Condition/Diagnosis *</label>
+        <input type="text" name="diagnosis" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;" placeholder="e.g., Diabetes, Hypertension">
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Date of Diagnosis</label>
+        <input type="date" name="date" style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;">
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Details</label>
+        <textarea name="details" style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; min-height:80px; resize:vertical;"></textarea>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="button" onclick="closeMedicalHistoryModal()" style="flex:1; padding:10px; background:#EAF3DE; color:#27500A; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer;">Cancel</button>
+        <button type="submit" style="flex:1; padding:10px; background:#3B6D11; color:white; border:none; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer; font-weight:500;">Add Record</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Prescription Modal -->
+<div id="prescriptionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background:white; padding:30px; border-radius:12px; width:450px; box-shadow:0 10px 40px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto;">
+    <h2 style="color:#27500A; margin-bottom:20px; font-size:18px;">Add Prescription</h2>
+    <form action="/add-prescription" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+      <input type="hidden" name="patient_id" value="{{ p[0] if p else '' }}">
+      
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Medicine Name *</label>
+        <input type="text" name="medicine_name" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;" placeholder="e.g., Aspirin, Metformin">
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Dosage *</label>
+        <input type="text" name="dosage" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;" placeholder="e.g., 500mg, 2 tablets">
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Frequency *</label>
+        <select name="frequency" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;">
+          <option value="">-- Select --</option>
+          <option value="Once a day">Once a day</option>
+          <option value="Twice a day">Twice a day</option>
+          <option value="Thrice a day">Thrice a day</option>
+          <option value="Four times a day">Four times a day</option>
+          <option value="As needed">As needed</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Duration (in days)</label>
+        <input type="number" name="duration" style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;" placeholder="e.g., 7, 30">
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="button" onclick="closePrescriptionModal()" style="flex:1; padding:10px; background:#EAF3DE; color:#27500A; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer;">Cancel</button>
+        <button type="submit" style="flex:1; padding:10px; background:#3B6D11; color:white; border:none; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer; font-weight:500;">Add Medicine</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Notes Modal -->
+<div id="notesModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background:white; padding:30px; border-radius:12px; width:450px; box-shadow:0 10px 40px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto;">
+    <h2 style="color:#27500A; margin-bottom:20px; font-size:18px;">Add Doctor Note</h2>
+    <form action="/add-note" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+      <input type="hidden" name="patient_id" value="{{ p[0] if p else '' }}">
+      
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Note Title *</label>
+        <input type="text" name="note_title" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;" placeholder="e.g., Follow-up needed">
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Note Content *</label>
+        <textarea name="note_content" required style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; min-height:100px; resize:vertical;"></textarea>
+      </div>
+
+      <div>
+        <label style="color:#27500A; font-weight:500; font-size:12px; display:block; margin-bottom:6px;">Priority</label>
+        <select name="priority" style="width:100%; padding:10px; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px;">
+          <option value="Normal">Normal</option>
+          <option value="High">High</option>
+          <option value="Urgent">Urgent</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="button" onclick="closeNotesModal()" style="flex:1; padding:10px; background:#EAF3DE; color:#27500A; border:0.5px solid #d4e8d4; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer;">Cancel</button>
+        <button type="submit" style="flex:1; padding:10px; background:#3B6D11; color:white; border:none; border-radius:9px; font-family:'Poppins',sans-serif; font-size:13px; cursor:pointer; font-weight:500;">Add Note</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
   function showTab(tabName, btn) {
     // Hide all tabs
-    ['overview','history','prescriptions','appointments','notes'].forEach(t => {
+    ['overview','history','prescriptions','notes'].forEach(t => {
       document.getElementById('tab-' + t).style.display = 'none';
     });
     // Remove active from all buttons
@@ -433,6 +523,39 @@
     document.getElementById('tab-' + tabName).style.display = 'block';
     btn.classList.add('active');
   }
+
+  // Medical History Modal Functions
+  function openMedicalHistoryModal() {
+    document.getElementById('medicalHistoryModal').style.display = 'flex';
+  }
+  function closeMedicalHistoryModal() {
+    document.getElementById('medicalHistoryModal').style.display = 'none';
+  }
+  document.getElementById('medicalHistoryModal').addEventListener('click', function(e) {
+    if (e.target === this) closeMedicalHistoryModal();
+  });
+
+  // Prescription Modal Functions
+  function openPrescriptionModal() {
+    document.getElementById('prescriptionModal').style.display = 'flex';
+  }
+  function closePrescriptionModal() {
+    document.getElementById('prescriptionModal').style.display = 'none';
+  }
+  document.getElementById('prescriptionModal').addEventListener('click', function(e) {
+    if (e.target === this) closePrescriptionModal();
+  });
+
+  // Notes Modal Functions
+  function openNotesModal() {
+    document.getElementById('notesModal').style.display = 'flex';
+  }
+  function closeNotesModal() {
+    document.getElementById('notesModal').style.display = 'none';
+  }
+  document.getElementById('notesModal').addEventListener('click', function(e) {
+    if (e.target === this) closeNotesModal();
+  });
 </script>
 
 </body>
