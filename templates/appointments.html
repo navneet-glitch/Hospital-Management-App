@@ -298,44 +298,8 @@
           <polyline points="15 18 9 12 15 6"/>
         </svg>
       </div>
-      <span class="cal-month">April 2026</span>
-      <div class="cal-days">
-        <div class="cal-day">
-          <div class="cal-day-name">Mon</div>
-          <div class="cal-day-num">13</div>
-          <div class="cal-day-dot hidden"></div>
-        </div>
-        <div class="cal-day">
-          <div class="cal-day-name">Tue</div>
-          <div class="cal-day-num">14</div>
-          <div class="cal-day-dot"></div>
-        </div>
-        <div class="cal-day active">
-          <div class="cal-day-name">Wed</div>
-          <div class="cal-day-num">15</div>
-          <div class="cal-day-dot"></div>
-        </div>
-        <div class="cal-day">
-          <div class="cal-day-name">Thu</div>
-          <div class="cal-day-num">16</div>
-          <div class="cal-day-dot"></div>
-        </div>
-        <div class="cal-day">
-          <div class="cal-day-name">Fri</div>
-          <div class="cal-day-num">17</div>
-          <div class="cal-day-dot hidden"></div>
-        </div>
-        <div class="cal-day">
-          <div class="cal-day-name">Sat</div>
-          <div class="cal-day-num">18</div>
-          <div class="cal-day-dot"></div>
-        </div>
-        <div class="cal-day">
-          <div class="cal-day-name">Sun</div>
-          <div class="cal-day-num">19</div>
-          <div class="cal-day-dot hidden"></div>
-        </div>
-      </div>
+      <span class="cal-month" id="calMonth"></span>
+      <div class="cal-days" id="calDays"></div>
       <div class="cal-nav">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#639922" stroke-width="2">
           <polyline points="9 18 15 12 9 6"/>
@@ -461,6 +425,48 @@
 
   </div>
 </div>
+
+<script>
+  // Populate calendar with dynamic dates
+  function populateCalendar() {
+    const today = new Date();
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    // Set month and year
+    const monthYear = monthNames[today.getMonth()] + ' ' + today.getFullYear();
+    document.getElementById('calMonth').textContent = monthYear;
+    
+    // Generate 7 days starting from today
+    const calDays = document.getElementById('calDays');
+    calDays.innerHTML = '';
+    
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      
+      const dayOfWeek = dayNames[date.getDay()];
+      const dayNum = date.getDate();
+      const hasAppointments = (i % 2 === 0); // Example: show dots for alternate days
+      
+      const isToday = i === 0;
+      const calDay = document.createElement('div');
+      calDay.className = 'cal-day' + (isToday ? ' active' : '');
+      
+      calDay.innerHTML = `
+        <div class="cal-day-name">${dayOfWeek}</div>
+        <div class="cal-day-num">${dayNum}</div>
+        <div class="cal-day-dot${!hasAppointments ? ' hidden' : ''}"></div>
+      `;
+      
+      calDays.appendChild(calDay);
+    }
+  }
+  
+  // Initialize calendar on page load
+  document.addEventListener('DOMContentLoaded', populateCalendar);
+</script>
 
 </body>
 </html>
